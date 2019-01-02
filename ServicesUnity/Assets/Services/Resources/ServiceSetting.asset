@@ -1,0 +1,176 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f13fedef67674469a1cac26e752154b, type: 3}
+  m_Name: ServiceSetting
+  m_EditorClassIdentifier: 
+  AppID_IOS: 1373182463
+  PackageName: 
+  UseFirebase: 1
+  UseFBAnalytics: 1
+  UseFBRealtimeDatabase: 1
+  UseFBLeaderBoard: 1
+  FirebaseDatabaseURL: https://word-link-e5bcf.firebaseio.com/
+  UseFirebaseAuth: 1
+  UseOpenIAB: 1
+  OpenIABManagerPrefab: {fileID: 100000, guid: 90e394b0ec6b04c40a2ae2ae5977cd91, type: 2}
+  AndroidPublicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqGUmn0tXzAJoWzf7iTipxBnYsvBw7YfX8aSotkN4XYSlCKXDkjo9fZxPQFdj8UHHNARn4cFQr7dhaEMJR/HnDSGiKIWMyeys2AFyti2fllnOlbHQkUR27WkPE8beBMs28edSiM8b8VkSr3zMcgPd4IDz+/XYuvrABiS25i4rmaIffR5yaDvk7GnTMm3FdLo/rBje/1VVvL3uAsbX6N0Nsr4mbPCGEMYN8eLtf6tzmAH8jRCx8rPy1mdfAkQ3L/zXxh5818h6zjO0r+Z7IhXrparozmP/e7DxQDMu53UirRE/6j2KlvwA/i/jpCbJM+74Eq69qFfdmqIJYN+kMvD41wIDAQAB
+  OpenIABIOSSkus:
+  - Name: Pile of Coins
+    SKU: athena.studio.wordgame.240coins
+    Coin: 240
+    TextureKey: PileCoin
+    USDPrice: $0.99
+    Bonus: 
+    ScaleImage: 0.7
+    Flags: 17
+  - Name: Bowl of Coins
+    SKU: athena.studio.wordgame.720coins
+    Coin: 720
+    TextureKey: BowCoin
+    USDPrice: $2.99
+    Bonus: 
+    ScaleImage: 0.85
+    Flags: 17
+  - Name: Pot of Coins
+    SKU: athena.studio.wordgame.1320coins
+    Coin: 1320
+    TextureKey: PotCoin
+    USDPrice: $4.99
+    Bonus: +10%
+    ScaleImage: 1
+    Flags: 17
+  - Name: Jar of Coins
+    SKU: athena.studio.wordgame.2880coins
+    Coin: 2880
+    TextureKey: JarCoin
+    USDPrice: $9.99
+    Bonus: +20%
+    ScaleImage: 1.1
+    Flags: 17
+  - Name: Bag of Coins
+    SKU: athena.studio.wordgame.6240coins
+    Coin: 6240
+    TextureKey: BagCoin
+    USDPrice: $19.99
+    Bonus: +30%
+    ScaleImage: 1.2
+    Flags: 17
+  - Name: Box of Coins
+    SKU: athena.studio.wordgame.18000coins
+    Coin: 18000
+    TextureKey: BoxCoin
+    USDPrice: $49.99
+    Bonus: +50%
+    ScaleImage: 1.3
+    Flags: 17
+  - Name: Starter Pack
+    SKU: athena.studio.wordgame.starterpack
+    Coin: 2400
+    TextureKey: Starter
+    USDPrice: $1.99
+    Bonus: 
+    ScaleImage: 1.6
+    Flags: 18
+  - Name: Pot of Coins No Ads
+    SKU: athena.studio.wordgame.1320coinsnoads
+    Coin: 1320
+    TextureKey: PotCoin
+    USDPrice: $4.99
+    Bonus: +10%
+    ScaleImage: 1
+    Flags: 9
+  - Name: Jar of Coins No Ads
+    SKU: athena.studio.wordgame.2880coinsnoads
+    Coin: 2880
+    TextureKey: JarCoin
+    USDPrice: $9.99
+    Bonus: +20%
+    ScaleImage: 1.1
+    Flags: 9
+  - Name: Bag of Coins No Ads
+    SKU: athena.studio.wordgame.6240coinsnoads
+    Coin: 6240
+    TextureKey: BagCoin
+    USDPrice: $19.99
+    Bonus: +30%
+    ScaleImage: 1.2
+    Flags: 9
+  - Name: Box of Coins No Ads
+    SKU: athena.studio.wordgame.18000coinsnoads
+    Coin: 18000
+    TextureKey: BoxCoin
+    USDPrice: $49.99
+    Bonus: +50%
+    ScaleImage: 1.3
+    Flags: 9
+  - Name: Chocolate Theme Combo
+    SKU: athena.studio.wordgame.720coinschocolate
+    Coin: 720
+    TextureKey: BoxCoinChoco
+    USDPrice: $2.99
+    Bonus: 
+    ScaleImage: 1
+    Flags: 4
+  - Name: Green Garden Theme
+    SKU: athena.studio.wordgame.1320coinsgreengarden
+    Coin: 1320
+    TextureKey: PotCoin
+    USDPrice: $4.99
+    Bonus: 
+    ScaleImage: 1
+    Flags: 12
+  - Name: Loyal Pack
+    SKU: athena.studio.wordgame.loyaldeal
+    Coin: 1440
+    TextureKey: Starter
+    USDPrice: $0.99
+    Bonus: x6 value
+    ScaleImage: 1.6
+    Flags: 18
+  - Name: Weekend Deal 1
+    SKU: athena.studio.wordgame.weekenddeal1
+    Coin: 480
+    TextureKey: Starter
+    USDPrice: $0.99
+    Bonus: x2 value
+    ScaleImage: 1.6
+    Flags: 18
+  - Name: Halloween Theme Pack
+    SKU: athena.studio.wordgame.1320coinshalloween
+    Coin: 1320
+    TextureKey: HalloweenBowCoin
+    USDPrice: $4.99
+    Bonus: 
+    ScaleImage: 1.2
+    Flags: 12
+  UseFacebook: 1
+  UseAdmob: 1
+  AdmobAppID_IOS: ca-app-pub-6328476713475419~1125888455
+  AdmobAppID_Android: ca-app-pub-6328476713475419~6083639384
+  AdmobBannerID_IOS: ca-app-pub-6328476713475419/8061712330
+  AdmobBannerID_Android: ca-app-pub-6328476713475419/1423992034
+  AdmobInterstitialID_IOS: ca-app-pub-6328476713475419/9714824917
+  AdmobInterstitialID_Android: ca-app-pub-6328476713475419/6693889763
+  AdmobRewardedVideoID_IOS: ca-app-pub-6328476713475419/4473821118
+  AdmobRewardedVideoID_Android: ca-app-pub-6328476713475419/3843695606
+  UseFlurry: 1
+  FlurryKey_IOS: XYR6HRJGGCDXNY6B2WXF
+  FlurryKey_Android: 3ZK2DVKD6W568SPNZSNZ
+  FlurryEnableLog: 0
+  FlurryEnableCrashReport: 1
+  FlurryReplicateDataToUnityAnalytics: 0
+  FlurryIOSIAPReportingEnabled: 1
+  UseAppsFlyer: 1
+  AppsFlyerKey: hpC4qLBzcaMZNEtYeoh4pe
+  UseApplovin: 0
+  ApplovinKey: 1a7Gb0fpJ9rA86ZTEnUorZotgLbpdZ7e8FwkFZWZkMksSHKh3pTuNGl2bLrDvzt1CnmSLH03dlw50En31EyPVh
+  UseZendesk: 0
+  ZendeskChatKey: '5nJBlIEMA03aYFBJHIY3VeWweEHP0SqJ '
