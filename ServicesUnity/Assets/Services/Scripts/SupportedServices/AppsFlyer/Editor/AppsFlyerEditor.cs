@@ -6,7 +6,7 @@ using System.IO;
 
 public class AppsFlyerEditor : ServiceEditor 
 {
-	public AppsFlyerEditor(SettingDef def)
+	public AppsFlyerEditor(ServiceDef def)
         : base(def)
     {
 
@@ -17,7 +17,7 @@ public class AppsFlyerEditor : ServiceEditor
         return "Appflyer";
     }
 
-	public override void OnInspectorGUI()
+	public override void OnInspectorGUI(ServiceDefEditor editor)
 	{
 		if(!def.UseAppsFlyer)
 		{

@@ -8,7 +8,7 @@ public class FirebaseServiceEditor : ServiceEditor
 	FirebaseAnalyticsEditor analytics;
 	FirebaseRealtimeDatabaseEditor realtimeDatabase;
 
-	public FirebaseServiceEditor(SettingDef def)
+	public FirebaseServiceEditor(ServiceDef def)
         : base(def)
     {
 		analytics = new FirebaseAnalyticsEditor(def);
@@ -20,7 +20,7 @@ public class FirebaseServiceEditor : ServiceEditor
         return "Firebase";
     }
 
-	public override void OnInspectorGUI()
+	public override void OnInspectorGUI(ServiceDefEditor editor)
 	{
 		if(!def.UseFirebase)
 		{
@@ -33,7 +33,7 @@ public class FirebaseServiceEditor : ServiceEditor
 		
 		def.UseFBAnalytics = BoldToggle("Use Analytics", def.UseFBAnalytics);
 		
-		realtimeDatabase.OnInspectorGUI();
+		realtimeDatabase.OnInspectorGUI(editor);
 
 		
 		//end section

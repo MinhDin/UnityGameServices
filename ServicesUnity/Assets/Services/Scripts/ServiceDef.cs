@@ -7,7 +7,7 @@ using System.IO;
 using UnityEditor;
 #endif
 
-public class SettingDef : ScriptableObject
+public partial class ServiceDef : ScriptableObject
 {
 	public string AppID_IOS;
 	public string PackageName;
@@ -31,16 +31,7 @@ public class SettingDef : ScriptableObject
 	//Facebook
 	public bool UseFacebook;
 
-	//Admob
-	public bool UseAdmob;
-	public string AdmobAppID_IOS;
-	public string AdmobAppID_Android;
-	public string AdmobBannerID_IOS;
-	public string AdmobBannerID_Android;
-	public string AdmobInterstitialID_IOS;
-	public string AdmobInterstitialID_Android;
-	public string AdmobRewardedVideoID_IOS;
-	public string AdmobRewardedVideoID_Android;
+	
 
 	//Flurry
 	public bool UseFlurry;
@@ -67,7 +58,7 @@ public class SettingDef : ScriptableObject
     [MenuItem("Scriptable/Services/Setting")]
     public static void CreateAsset()
     {
-        SettingDef asset = ScriptableObject.CreateInstance<SettingDef>();
+        ServiceDef asset = ScriptableObject.CreateInstance<ServiceDef>();
 
         string path = AssetDatabase.GetAssetPath(Selection.activeObject);
         if (path == "")

@@ -6,7 +6,7 @@ using UnityEditor;
 
 public class ServiceEditor
 {
-	protected SettingDef def;
+	protected ServiceDef def;
 	protected static FontStyle baseFontStyle;
 
 	protected static Color baseBackgroundColor;
@@ -24,12 +24,12 @@ public class ServiceEditor
 		gsAlterQuest.normal.background = MakeTex(600, 1, new Color(1.0f, 1.0f, 1.0f, 0.1f));
 	}
 
-	public ServiceEditor(SettingDef def)
+	public ServiceEditor(ServiceDef def)
 	{
 		this.def = def;
 	}
 
-	public virtual void OnInspectorGUI()
+	public virtual void OnInspectorGUI(ServiceDefEditor editor)
 	{
 
 	}

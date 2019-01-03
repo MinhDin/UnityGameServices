@@ -6,7 +6,7 @@ using System.IO;
 
 public class ZenDeskServiceEditor : ServiceEditor
 {
-	public ZenDeskServiceEditor(SettingDef def)
+	public ZenDeskServiceEditor(ServiceDef def)
         : base(def)
     {
 
@@ -17,7 +17,7 @@ public class ZenDeskServiceEditor : ServiceEditor
         return "ZenDesk";
     }
 
-	public override void OnInspectorGUI()
+	public override void OnInspectorGUI(ServiceDefEditor editor)
 	{
 		if(!def.UseZendesk)
 		{

@@ -6,7 +6,7 @@ using UnityEditor;
 
 public class AdmobServiceEditor : ServiceEditor
 {
-    public AdmobServiceEditor(SettingDef def)
+    public AdmobServiceEditor(ServiceDef def)
         : base(def)
     {
 
@@ -17,7 +17,7 @@ public class AdmobServiceEditor : ServiceEditor
         return "Admob";
     }
 
-    public override void OnInspectorGUI()
+    public override void OnInspectorGUI(ServiceDefEditor editor)
     {
         if (!def.UseAdmob)
         {
@@ -27,8 +27,7 @@ public class AdmobServiceEditor : ServiceEditor
             }
             return;
         }
-
-        AdmobValidate();
+#if SERVICE_ADMOB
         def.AdmobAppID_IOS = EditorGUILayout.TextField("Admob ID IOS", def.AdmobAppID_IOS);
         def.AdmobAppID_Android = EditorGUILayout.TextField("Admob ID Android", def.AdmobAppID_Android);
         def.AdmobBannerID_IOS = EditorGUILayout.TextField("Banner ID IOS", def.AdmobBannerID_IOS);
@@ -37,7 +36,7 @@ public class AdmobServiceEditor : ServiceEditor
         def.AdmobInterstitialID_Android = EditorGUILayout.TextField("Interstitial ID Android", def.AdmobInterstitialID_Android);
         def.AdmobRewardedVideoID_IOS = EditorGUILayout.TextField("Rewarded Video ID IOS", def.AdmobRewardedVideoID_IOS);
         def.AdmobRewardedVideoID_Android = EditorGUILayout.TextField("Rewarded Video ID Android", def.AdmobRewardedVideoID_Android);
-
+#endif
         //end section
         GUILayout.Space(50);
         if (RedButton("Remove Admob"))
@@ -45,7 +44,7 @@ public class AdmobServiceEditor : ServiceEditor
             def.UseAdmob = false;
         }
     }
-
+/*
     void AdmobValidate()
 	{
 		if(!DirectoryExist("GoogleMobileAds"))
@@ -58,7 +57,7 @@ public class AdmobServiceEditor : ServiceEditor
 			LogError("* Get App Id from Admob : https://apps.admob.com/");
 		}
 	}
-    
+ */    
     public override void OnWriteDefine(StreamWriter writer)
     {
 		writer.WriteLine("#define SERVICE_ADMOB");

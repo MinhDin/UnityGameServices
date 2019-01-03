@@ -8,7 +8,7 @@ public class OpenIABServiceEditor : ServiceEditor
 {
 	bool foldout;
 
-	public OpenIABServiceEditor(SettingDef def)
+	public OpenIABServiceEditor(ServiceDef def)
         : base(def)
     {
 
@@ -19,7 +19,7 @@ public class OpenIABServiceEditor : ServiceEditor
         return "OpenIAB";
     }
 
-	public override void OnInspectorGUI()
+	public override void OnInspectorGUI(ServiceDefEditor editor)
 	{
 		if(!def.UseOpenIAB)
 		{

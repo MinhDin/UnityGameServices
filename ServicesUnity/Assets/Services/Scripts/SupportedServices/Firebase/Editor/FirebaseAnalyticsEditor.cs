@@ -6,7 +6,7 @@ using System.IO;
 
 public class FirebaseAnalyticsEditor : ServiceEditor 
 {
-	public FirebaseAnalyticsEditor(SettingDef def)
+	public FirebaseAnalyticsEditor(ServiceDef def)
         : base(def)
     {
 
@@ -17,7 +17,7 @@ public class FirebaseAnalyticsEditor : ServiceEditor
         return "Firebase Analytics";
     }
 
-	public override void OnInspectorGUI()
+	public override void OnInspectorGUI(ServiceDefEditor editor)
 	{
 		def.UseFBRealtimeDatabase = BoldToggle("Use Realtime Database", def.UseFBRealtimeDatabase);
 

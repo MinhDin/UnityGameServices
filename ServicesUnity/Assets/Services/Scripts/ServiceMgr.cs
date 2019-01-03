@@ -8,7 +8,7 @@ namespace Services
     {
         List<IService> services;
         public ServiceEvents Events;
-        public SettingDef Def;
+        public ServiceDef Def;
 
         private void Awake()
         {

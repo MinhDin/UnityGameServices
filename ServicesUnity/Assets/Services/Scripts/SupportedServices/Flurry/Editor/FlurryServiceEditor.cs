@@ -6,7 +6,7 @@ using System.IO;
 
 public class FlurryServiceEditor : ServiceEditor 
 {
-	public FlurryServiceEditor(SettingDef def)
+	public FlurryServiceEditor(ServiceDef def)
         : base(def)
     {
 
@@ -17,7 +17,7 @@ public class FlurryServiceEditor : ServiceEditor
         return "Flurry";
     }
 
-	public override void OnInspectorGUI()
+	public override void OnInspectorGUI(ServiceDefEditor editor)
 	{
 		if(!def.UseFlurry)
 		{

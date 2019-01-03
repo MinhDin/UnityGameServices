@@ -7,13 +7,13 @@ using Services;
 using System;
 using System.Linq;
 
-[CustomEditor(typeof(SettingDef))]
-public class SettingDefEditor : Editor
+[CustomEditor(typeof(ServiceDef))]
+public class ServiceDefEditor : Editor
 {
 	string DEFINE_FILE_PATH;
 	string SUPPORTED_SERVICES_PATH;
 
-	SettingDef def;
+	ServiceDef def;
 	static StreamWriter writer;
 	//static
 	static bool[] foldout;
@@ -25,7 +25,7 @@ public class SettingDefEditor : Editor
 
 	bool initStaticServices;
 
-	static SettingDefEditor()
+	static ServiceDefEditor()
 	{		
 		InitStatic();
 	}
@@ -45,7 +45,7 @@ public class SettingDefEditor : Editor
 
 	private void OnEnable()
 	{
-		def = target as SettingDef;
+		def = target as ServiceDef;
 	}
 
 	void RewriteDefine()
@@ -53,9 +53,10 @@ public class SettingDefEditor : Editor
 		writer = new StreamWriter(DEFINE_FILE_PATH, false);
 		writer.Close();
 	}
+
 	public override void OnInspectorGUI()
 	{
-		//if(!initStaticServices)
+		if(!initStaticServices)
 		{
 			if(services == null)
 			{
@@ -102,7 +103,7 @@ public class SettingDefEditor : Editor
 		toolbarIndex = GUILayout.Toolbar(toolbarIndex, toolbar);
 		int len = services.Count;
 		toolbarIndex = Mathf.Min(toolbarIndex, len - 1);
-		services[toolbarIndex].OnInspectorGUI();
+		services[toolbarIndex].OnInspectorGUI(this);
 
 		GUILayout.Space(50);
 		if(!string.IsNullOrEmpty(error))

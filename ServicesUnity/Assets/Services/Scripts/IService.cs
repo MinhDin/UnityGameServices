@@ -6,10 +6,10 @@ namespace Services
 {
 	public abstract class IService 
 	{
-		protected SettingDef def;
+		protected ServiceDef def;
 		protected ServiceEvents serviceE;
 
-		public virtual IService Init(SettingDef def, ServiceEvents serviceE)//return IService to register to mgr
+		public virtual IService Init(ServiceDef def, ServiceEvents serviceE)//return IService to register to mgr
 		{
 			this.def = def;
 			this.serviceE = serviceE;

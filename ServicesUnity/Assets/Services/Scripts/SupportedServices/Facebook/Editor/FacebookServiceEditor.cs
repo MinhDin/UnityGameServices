@@ -6,7 +6,7 @@ using System.IO;
 
 public class FacebookServiceEditor : ServiceEditor 
 {
-	public FacebookServiceEditor(SettingDef def)
+	public FacebookServiceEditor(ServiceDef def)
         : base(def)
     {
 
@@ -17,7 +17,7 @@ public class FacebookServiceEditor : ServiceEditor
         return "Facebook";
     }
 
-	public override void OnInspectorGUI()
+	public override void OnInspectorGUI(ServiceDefEditor editor)
 	{
 		if(!def.UseFacebook)
 		{
