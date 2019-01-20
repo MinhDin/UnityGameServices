@@ -36,7 +36,7 @@ public class ServiceEditor
 
 	public virtual void OnWriteDefine(StreamWriter writer)
 	{
-
+		
 	}
 
 	public virtual string GetName()

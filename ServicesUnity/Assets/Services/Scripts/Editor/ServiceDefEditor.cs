@@ -48,9 +48,14 @@ public class ServiceDefEditor : Editor
 		def = target as ServiceDef;
 	}
 
-	void RewriteDefine()
+	public void RewriteDefine()
 	{
 		writer = new StreamWriter(DEFINE_FILE_PATH, false);
+		int len = services.Count;
+		for(int i = 0; i < len; ++i)
+		{
+			services[i].OnWriteDefine(writer);
+		}
 		writer.Close();
 	}
 

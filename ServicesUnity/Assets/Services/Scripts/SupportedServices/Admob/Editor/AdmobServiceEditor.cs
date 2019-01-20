@@ -24,9 +24,14 @@ public class AdmobServiceEditor : ServiceEditor
             if (GreenButton("Active Admob"))
             {
                 def.UseAdmob = true;
+                editor.RewriteDefine();
             }
-            return;
+            else
+            {
+                return;
+            }
         }
+
 #if SERVICE_ADMOB
         def.AdmobAppID_IOS = EditorGUILayout.TextField("Admob ID IOS", def.AdmobAppID_IOS);
         def.AdmobAppID_Android = EditorGUILayout.TextField("Admob ID Android", def.AdmobAppID_Android);
@@ -37,6 +42,7 @@ public class AdmobServiceEditor : ServiceEditor
         def.AdmobRewardedVideoID_IOS = EditorGUILayout.TextField("Rewarded Video ID IOS", def.AdmobRewardedVideoID_IOS);
         def.AdmobRewardedVideoID_Android = EditorGUILayout.TextField("Rewarded Video ID Android", def.AdmobRewardedVideoID_Android);
 #endif
+
         //end section
         GUILayout.Space(50);
         if (RedButton("Remove Admob"))
@@ -60,6 +66,9 @@ public class AdmobServiceEditor : ServiceEditor
  */    
     public override void OnWriteDefine(StreamWriter writer)
     {
-		writer.WriteLine("#define SERVICE_ADMOB");
+        if(def.UseAdmob)
+        {
+		    writer.WriteLine("#define SERVICE_ADMOB");
+        }
     }
 }

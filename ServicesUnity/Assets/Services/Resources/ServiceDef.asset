@@ -4,12 +4,13 @@
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0f13fedef67674469a1cac26e752154b, type: 3}
-  m_Name: ServiceSetting
+  m_Name: ServiceDef
   m_EditorClassIdentifier: 
   AppID_IOS: 1373182463
   PackageName: 
@@ -152,15 +153,6 @@ MonoBehaviour:
     ScaleImage: 1.2
     Flags: 12
   UseFacebook: 1
-  UseAdmob: 1
-  AdmobAppID_IOS: ca-app-pub-6328476713475419~1125888455
-  AdmobAppID_Android: ca-app-pub-6328476713475419~6083639384
-  AdmobBannerID_IOS: ca-app-pub-6328476713475419/8061712330
-  AdmobBannerID_Android: ca-app-pub-6328476713475419/1423992034
-  AdmobInterstitialID_IOS: ca-app-pub-6328476713475419/9714824917
-  AdmobInterstitialID_Android: ca-app-pub-6328476713475419/6693889763
-  AdmobRewardedVideoID_IOS: ca-app-pub-6328476713475419/4473821118
-  AdmobRewardedVideoID_Android: ca-app-pub-6328476713475419/3843695606
   UseFlurry: 1
   FlurryKey_IOS: XYR6HRJGGCDXNY6B2WXF
   FlurryKey_Android: 3ZK2DVKD6W568SPNZSNZ
@@ -174,3 +166,4 @@ MonoBehaviour:
   ApplovinKey: 1a7Gb0fpJ9rA86ZTEnUorZotgLbpdZ7e8FwkFZWZkMksSHKh3pTuNGl2bLrDvzt1CnmSLH03dlw50En31EyPVh
   UseZendesk: 0
   ZendeskChatKey: '5nJBlIEMA03aYFBJHIY3VeWweEHP0SqJ '
+  UseAdmob: 1
