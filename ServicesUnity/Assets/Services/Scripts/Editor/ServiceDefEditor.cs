@@ -10,8 +10,10 @@ using System.Linq;
 [CustomEditor(typeof(ServiceDef))]
 public class ServiceDefEditor : Editor
 {
+
 	string DEFINE_FILE_PATH;
 	string SUPPORTED_SERVICES_PATH;
+	string SERVICES_LINK_PATH = "Assets/Services/ServicesLink.json";
 
 	ServiceDef def;
 	static StreamWriter writer;
@@ -22,6 +24,7 @@ public class ServiceDefEditor : Editor
 	static int toolbarIndex;	
 	static string error;
 	static List<ServiceEditor> services;
+	static ServicesLink link;
 
 	bool initStaticServices;
 
@@ -51,26 +54,59 @@ public class ServiceDefEditor : Editor
 	public void RewriteDefine()
 	{
 		writer = new StreamWriter(DEFINE_FILE_PATH, false);
+		//writer.WriteLine("//This file is generated automatically by LavaServices. Please don't modify. It assumes you don't use this file.:\">");
 		int len = services.Count;
 		for(int i = 0; i < len; ++i)
 		{
 			services[i].OnWriteDefine(writer);
 		}
 		writer.Close();
+		AssetDatabase.Refresh();
+		AssetDatabase.SaveAssets();
+		AssetDatabase.ImportAsset("Assets/Services/Scripts/Editor/ServiceDefEditor.cs");
 	}
-
+#if WRITE_JSON_LINK
+	bool a;
+#endif
 	public override void OnInspectorGUI()
 	{
 		if(!initStaticServices)
 		{
+			
 			if(services == null)
 			{
 				services = new List<ServiceEditor>();
 			}
 			services.Clear();
 			initStaticServices = true;
-			DEFINE_FILE_PATH = Application.dataPath + "/Services/Scripts/Define.h";
+			DEFINE_FILE_PATH = Application.dataPath + "/mcs.rsp";
 			SUPPORTED_SERVICES_PATH = Application.dataPath + "/Services/Scripts/SupportedServices";
+
+			#if WRITE_JSON_LINK
+			if(!a)
+			{
+				ServicesLink link = new ServicesLink();
+				link.Links = new DownloadLink[]{
+					new DownloadLink{Name = "AdmobPackage",Link="https://github.com/googleads/googleads-mobile-unity/releases/download/v3.15.1/GoogleMobileAds.unitypackage"},
+				};
+				writer = new StreamWriter(SERVICES_LINK_PATH, false);
+				writer.Write(JsonUtility.ToJson(link));
+				writer.Close();
+			}
+			return;
+			#endif
+
+			TextAsset linkJson = AssetDatabase.LoadAssetAtPath(SERVICES_LINK_PATH, typeof(TextAsset)) as TextAsset;
+			if(linkJson != null)
+			{
+				link = JsonUtility.FromJson<ServicesLink>(linkJson.text);
+			}
+			else
+			{
+				initStaticServices = false;
+				Debug.LogError("File not found : " + SERVICES_LINK_PATH);
+				return;
+			}
 
 			new ServiceEditor(null);
 			string[] directories = Directory.GetDirectories(SUPPORTED_SERVICES_PATH);
@@ -122,16 +158,13 @@ public class ServiceDefEditor : Editor
 		}
 	}
 
-	//Auth
-	void AuthValidate()
+	public string GetDownloadLinkByKey(string key)
 	{
-		if(def.UseFBRealtimeDatabase)
+		if(link != null)
 		{
-			def.UseFirebaseAuth = true;
+			return link.GetDownloadLinkByKey(key);
 		}
-		else 
-		{
-			def.UseFirebaseAuth = false;
-		}
+
+		return string.Empty;
 	}
 }

@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class AppsFlyerTrackerCallbacks : MonoBehaviour 
 {
-	public ServiceEvents ServiceE;
+	public Services.ServiceEvents ServiceE;
 
     void Awake()
     {

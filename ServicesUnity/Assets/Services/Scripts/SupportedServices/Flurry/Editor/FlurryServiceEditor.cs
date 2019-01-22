@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using System.IO;
+using Services;
 
 public class FlurryServiceEditor : ServiceEditor 
 {
@@ -24,6 +25,7 @@ public class FlurryServiceEditor : ServiceEditor
 			if(GreenButton("Active Flurry"))
 			{
 				def.UseFlurry = true;
+				editor.RewriteDefine();
 			}
 			return;
 		}
@@ -38,11 +40,25 @@ public class FlurryServiceEditor : ServiceEditor
 		if(RedButton("Remove Flurry"))
 		{
 			def.UseFlurry = false;
+			editor.RewriteDefine();
 		}
 	}
 
+	public override bool IsValidate()
+	{
+		return false;
+	}
+
+	public override void DownloadPackage(ServiceDefEditor editor)
+	{
+
+	}
+	
 	public override void OnWriteDefine(StreamWriter writer)
     {
-		writer.WriteLine("#define SERVICE_FLURRY");
+		if(def.UseFlurry)
+		{
+			writer.WriteLine("-define:SERVICE_FLURRY");
+		}
     }
 }

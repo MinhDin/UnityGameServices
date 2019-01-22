@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using System.IO;
+using Services;
 
 public class FirebaseRealtimeDatabaseEditor : ServiceEditor 
 {
@@ -44,8 +45,21 @@ public class FirebaseRealtimeDatabaseEditor : ServiceEditor
 		}
 	}
 
+	public override bool IsValidate()
+	{
+		return false;
+	}
+
+	public override void DownloadPackage(ServiceDefEditor editor)
+	{
+
+	}
+	
 	public override void OnWriteDefine(StreamWriter writer)
     {
-		writer.WriteLine("#define SERVICE_FACEBOOK");
+		if(def.UseFBRealtimeDatabase)
+		{
+			writer.WriteLine("-define:SERVICE_FIREBASE_REALTIMEDATABASE");
+		}
     }
 }

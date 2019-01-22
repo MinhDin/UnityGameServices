@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using System.IO;
+using Services;
 
 public class FacebookServiceEditor : ServiceEditor 
 {
@@ -24,6 +25,7 @@ public class FacebookServiceEditor : ServiceEditor
 			if(GreenButton("Active Facebook"))
 			{
 				def.UseFacebook = true;
+				editor.RewriteDefine();
 			}
 			return;
 		}
@@ -33,11 +35,25 @@ public class FacebookServiceEditor : ServiceEditor
 		if(RedButton("Remove Facebook"))
 		{
 			def.UseFacebook = false;
+			editor.RewriteDefine();
 		}
 	}
 
+	public override bool IsValidate()
+	{
+		return false;
+	}
+
+	public override void DownloadPackage(ServiceDefEditor editor)
+	{
+
+	}
+	
 	public override void OnWriteDefine(StreamWriter writer)
     {
-		writer.WriteLine("#define SERVICE_FACEBOOK");
+		if(def.UseFacebook)
+		{
+			writer.WriteLine("-define:SERVICE_FACEBOOK");
+		}
     }
 }

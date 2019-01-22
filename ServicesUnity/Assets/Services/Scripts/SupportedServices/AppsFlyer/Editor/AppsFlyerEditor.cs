@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using System.IO;
+using Services;
 
 public class AppsFlyerEditor : ServiceEditor 
 {
@@ -39,8 +40,18 @@ public class AppsFlyerEditor : ServiceEditor
 		}
 	}
 
+	public override bool IsValidate()
+	{
+		return false;
+	}
+
+	public override void DownloadPackage(ServiceDefEditor editor)
+	{
+
+	}
+	
 	public override void OnWriteDefine(StreamWriter writer)
     {
-		writer.WriteLine("#define SERVICE_APPSFLYER");
+		writer.WriteLine("-define:SERVICE_APPSFLYER");
     }
 }

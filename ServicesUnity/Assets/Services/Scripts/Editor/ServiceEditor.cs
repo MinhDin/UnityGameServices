@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using UnityEditor;
+using Services;
 
 public class ServiceEditor
 {
@@ -37,6 +38,16 @@ public class ServiceEditor
 	public virtual void OnWriteDefine(StreamWriter writer)
 	{
 		
+	}
+	
+	public virtual bool IsValidate()
+	{
+		return false;
+	}
+
+	public virtual void DownloadPackage(ServiceDefEditor editor)
+	{
+
 	}
 
 	public virtual string GetName()

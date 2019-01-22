@@ -14,14 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AppID_IOS: 1373182463
   PackageName: 
-  UseFirebase: 1
+  UseFirebase: 0
   UseFBAnalytics: 1
   UseFBRealtimeDatabase: 1
   UseFBLeaderBoard: 1
   FirebaseDatabaseURL: https://word-link-e5bcf.firebaseio.com/
   UseFirebaseAuth: 1
-  UseOpenIAB: 1
-  OpenIABManagerPrefab: {fileID: 100000, guid: 90e394b0ec6b04c40a2ae2ae5977cd91, type: 2}
+  UseOpenIAB: 0
+  OpenIABManagerPrefab: {fileID: 0}
   AndroidPublicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqGUmn0tXzAJoWzf7iTipxBnYsvBw7YfX8aSotkN4XYSlCKXDkjo9fZxPQFdj8UHHNARn4cFQr7dhaEMJR/HnDSGiKIWMyeys2AFyti2fllnOlbHQkUR27WkPE8beBMs28edSiM8b8VkSr3zMcgPd4IDz+/XYuvrABiS25i4rmaIffR5yaDvk7GnTMm3FdLo/rBje/1VVvL3uAsbX6N0Nsr4mbPCGEMYN8eLtf6tzmAH8jRCx8rPy1mdfAkQ3L/zXxh5818h6zjO0r+Z7IhXrparozmP/e7DxQDMu53UirRE/6j2KlvwA/i/jpCbJM+74Eq69qFfdmqIJYN+kMvD41wIDAQAB
   OpenIABIOSSkus:
   - Name: Pile of Coins
@@ -152,8 +152,8 @@ MonoBehaviour:
     Bonus: 
     ScaleImage: 1.2
     Flags: 12
-  UseFacebook: 1
-  UseFlurry: 1
+  UseFacebook: 0
+  UseFlurry: 0
   FlurryKey_IOS: XYR6HRJGGCDXNY6B2WXF
   FlurryKey_Android: 3ZK2DVKD6W568SPNZSNZ
   FlurryEnableLog: 0
@@ -166,4 +166,4 @@ MonoBehaviour:
   ApplovinKey: 1a7Gb0fpJ9rA86ZTEnUorZotgLbpdZ7e8FwkFZWZkMksSHKh3pTuNGl2bLrDvzt1CnmSLH03dlw50En31EyPVh
   UseZendesk: 0
   ZendeskChatKey: '5nJBlIEMA03aYFBJHIY3VeWweEHP0SqJ '
-  UseAdmob: 1
+  UseAdmob: 0

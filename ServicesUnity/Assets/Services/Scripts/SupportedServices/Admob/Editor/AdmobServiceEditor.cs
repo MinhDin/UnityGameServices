@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using UnityEditor;
+using System;
+using Services;
+using System.Net;
 
 public class AdmobServiceEditor : ServiceEditor
 {
@@ -19,6 +22,22 @@ public class AdmobServiceEditor : ServiceEditor
 
     public override void OnInspectorGUI(ServiceDefEditor editor)
     {
+        if(!IsValidate())
+        {
+            if(def.UseAdmob)
+            {
+                def.UseAdmob = false;
+                editor.RewriteDefine();
+            }
+
+            if (GreenButton("Download Admob Package"))
+            {
+                def.UseAdmob = true;
+                DownloadPackage(editor);
+            }
+            
+            return;
+        }
         if (!def.UseAdmob)
         {
             if (GreenButton("Active Admob"))
@@ -48,8 +67,30 @@ public class AdmobServiceEditor : ServiceEditor
         if (RedButton("Remove Admob"))
         {
             def.UseAdmob = false;
+            editor.RewriteDefine();
         }
     }
+
+    public override bool IsValidate()
+	{
+        Type type = Type.GetType("GoogleMobileAds.Api.BannerView, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null");
+        return type != null;
+	}
+
+	public override void DownloadPackage(ServiceDefEditor editor)
+	{
+        string link = editor.GetDownloadLinkByKey("AdmobPackage");
+        if(!string.IsNullOrEmpty(link))
+        {
+            WebClient webClient = new WebClient();
+            Debug.Log("DOWN ADMOB PACKAGE:" + link);
+            Debug.Log("DOWN TO:" + Application.dataPath + "/AdmobPackage.unitypackage");
+            webClient.DownloadFile(link, Application.dataPath + "/AdmobPackage.unitypackage");
+            AssetDatabase.Refresh();
+            AssetDatabase.ImportPackage("Assets/AdmobPackage.unitypackage", true);
+        }
+	}
+
 /*
     void AdmobValidate()
 	{
@@ -68,7 +109,7 @@ public class AdmobServiceEditor : ServiceEditor
     {
         if(def.UseAdmob)
         {
-		    writer.WriteLine("#define SERVICE_ADMOB");
+		    writer.WriteLine("-define:SERVICE_ADMOB");
         }
     }
 }

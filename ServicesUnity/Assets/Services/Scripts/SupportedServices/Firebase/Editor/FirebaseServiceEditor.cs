@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using Services;
 
 public class FirebaseServiceEditor : ServiceEditor 
 {
@@ -27,6 +28,7 @@ public class FirebaseServiceEditor : ServiceEditor
 			if(GreenButton("Active Firebase"))
 			{
 				def.UseFirebase = true;
+				editor.RewriteDefine();
 			}
 			return;
 		}
@@ -41,11 +43,27 @@ public class FirebaseServiceEditor : ServiceEditor
 		if(RedButton("Remove Firebase"))
 		{
 			def.UseFirebase = false;
+			editor.RewriteDefine();
 		}
 	}
 
+	public override bool IsValidate()
+	{
+		return false;
+	}
+
+	public override void DownloadPackage(ServiceDefEditor editor)
+	{
+
+	}
+	
 	public override void OnWriteDefine(StreamWriter writer)
     {
-		writer.WriteLine("#define SERVICE_FACEBOOK");
+		if(def.UseFirebase)
+		{
+			writer.WriteLine("-define:SERVICE_FIREBASE");
+			analytics.OnWriteDefine(writer);
+			realtimeDatabase.OnWriteDefine(writer);
+		}
     }
 }

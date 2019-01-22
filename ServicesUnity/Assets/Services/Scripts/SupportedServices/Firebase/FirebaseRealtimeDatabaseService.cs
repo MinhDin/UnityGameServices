@@ -8,6 +8,7 @@ using Firebase.Database;
 using Firebase.Unity.Editor;
 using Firebase.Analytics;
 using System;
+
 namespace Services
 {
     public class FirebaseRealtimeDatabaseService : IService
