@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿//#define WRITE_JSON_LINK
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -25,7 +26,7 @@ public class ServiceDefEditor : Editor
 	static string error;
 	static List<ServiceEditor> services;
 	static ServicesLink link;
-
+	static ImportPackageQueue importPackage;
 	bool initStaticServices;
 
 	static ServiceDefEditor()
@@ -38,6 +39,7 @@ public class ServiceDefEditor : Editor
 		toolbarIndex = 0;
 		foldoutIndex = 0;
 		foldout = new bool[50];
+		importPackage = ImportPackageQueue.Instance;
 		//toolbar = new string[]{"Firebase", "OpenIAB", "Facebook", "Admob", "Flurry", "AppFlyer", "Applovin", "Zendesk"};		
 
 		if(services == null)
@@ -79,7 +81,7 @@ public class ServiceDefEditor : Editor
 			}
 			services.Clear();
 			initStaticServices = true;
-			DEFINE_FILE_PATH = Application.dataPath + "/mcs.rsp";
+			DEFINE_FILE_PATH = Application.dataPath + "/csc.rsp";
 			SUPPORTED_SERVICES_PATH = Application.dataPath + "/Services/Scripts/SupportedServices";
 
 			#if WRITE_JSON_LINK
@@ -87,7 +89,14 @@ public class ServiceDefEditor : Editor
 			{
 				ServicesLink link = new ServicesLink();
 				link.Links = new DownloadLink[]{
-					new DownloadLink{Name = "AdmobPackage",Link="https://github.com/googleads/googleads-mobile-unity/releases/download/v3.15.1/GoogleMobileAds.unitypackage"},
+					new DownloadLink{Name = "AdmobPackage",
+						Link="https://github.com/googleads/googleads-mobile-unity/releases/download/v3.15.1/GoogleMobileAds.unitypackage"},
+					new DownloadLink{Name = "AppsFlyerPackage",
+						Link="https://github.com/AppsFlyerSDK/Unity/raw/master/AppsFlyerUnityPlugin_v4.18.0.unitypackage"},
+					new DownloadLink{Name = "FacebookPackage",
+						Link="https://origincache.facebook.com/developers/resources/?id=FacebookSDK-current.zip"},
+					new DownloadLink{Name = "FirebasePackage",
+						Link="https://dl.google.com/firebase/sdk/unity/firebase_unity_sdk_5.4.4.zip"},
 				};
 				writer = new StreamWriter(SERVICES_LINK_PATH, false);
 				writer.Write(JsonUtility.ToJson(link));
@@ -166,5 +175,10 @@ public class ServiceDefEditor : Editor
 		}
 
 		return string.Empty;
+	}
+
+	void GetAllService()
+	{
+
 	}
 }

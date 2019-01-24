@@ -9,6 +9,7 @@ using System.Net;
 
 public class AdmobServiceEditor : ServiceEditor
 {
+    const string PACKAGE_NAME = "AdmobPackage";
     public AdmobServiceEditor(ServiceDef def)
         : base(def)
     {
@@ -32,7 +33,7 @@ public class AdmobServiceEditor : ServiceEditor
 
             if (GreenButton("Download Admob Package"))
             {
-                def.UseAdmob = true;
+                def.UseAdmob = false;
                 DownloadPackage(editor);
             }
             
@@ -79,15 +80,16 @@ public class AdmobServiceEditor : ServiceEditor
 
 	public override void DownloadPackage(ServiceDefEditor editor)
 	{
-        string link = editor.GetDownloadLinkByKey("AdmobPackage");
+        string link = editor.GetDownloadLinkByKey(PACKAGE_NAME);
         if(!string.IsNullOrEmpty(link))
         {
             WebClient webClient = new WebClient();
-            Debug.Log("DOWN ADMOB PACKAGE:" + link);
-            Debug.Log("DOWN TO:" + Application.dataPath + "/AdmobPackage.unitypackage");
-            webClient.DownloadFile(link, Application.dataPath + "/AdmobPackage.unitypackage");
+            Debug.Log("DOWN " + PACKAGE_NAME + link);
+			string destination = Application.dataPath + "/" + PACKAGE_NAME + ".unitypackage";
+            Debug.Log("DOWN TO:" + destination);
+            webClient.DownloadFile(link, destination);
             AssetDatabase.Refresh();
-            AssetDatabase.ImportPackage("Assets/AdmobPackage.unitypackage", true);
+            ImportPackageQueue.Instance.ImportPackage("Assets/" + PACKAGE_NAME +  ".unitypackage");
         }
 	}
 

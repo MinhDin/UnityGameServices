@@ -4,9 +4,12 @@ using UnityEngine;
 using UnityEditor;
 using System.IO;
 using Services;
+using System.Net;
 
 public class AppsFlyerEditor : ServiceEditor 
 {
+	const string PACKAGE_NAME = "AppsflyerPackage";
+
 	public AppsFlyerEditor(ServiceDef def)
         : base(def)
     {
@@ -47,7 +50,17 @@ public class AppsFlyerEditor : ServiceEditor
 
 	public override void DownloadPackage(ServiceDefEditor editor)
 	{
-
+		string link = editor.GetDownloadLinkByKey(PACKAGE_NAME);
+        if(!string.IsNullOrEmpty(link))
+        {
+            WebClient webClient = new WebClient();
+            Debug.Log("DOWN " + PACKAGE_NAME + link);
+			string destination = Application.dataPath + "/" + PACKAGE_NAME + ".unitypackage";
+            Debug.Log("DOWN TO:" + destination);
+            webClient.DownloadFile(link, destination);
+            AssetDatabase.Refresh();
+            AssetDatabase.ImportPackage("Assets/" + PACKAGE_NAME +  ".unitypackage", true);
+        }
 	}
 	
 	public override void OnWriteDefine(StreamWriter writer)
