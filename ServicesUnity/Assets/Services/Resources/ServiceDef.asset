@@ -160,9 +160,9 @@ MonoBehaviour:
   FlurryEnableCrashReport: 1
   FlurryReplicateDataToUnityAnalytics: 0
   FlurryIOSIAPReportingEnabled: 1
-  UseAppsFlyer: 1
+  UseAppsFlyer: 0
   AppsFlyerKey: hpC4qLBzcaMZNEtYeoh4pe
-  UseApplovin: 0
+  UseAppslovin: 0
   ApplovinKey: 1a7Gb0fpJ9rA86ZTEnUorZotgLbpdZ7e8FwkFZWZkMksSHKh3pTuNGl2bLrDvzt1CnmSLH03dlw50En31EyPVh
   UseZendesk: 0
   ZendeskChatKey: '5nJBlIEMA03aYFBJHIY3VeWweEHP0SqJ '

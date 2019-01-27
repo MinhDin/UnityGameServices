@@ -5,12 +5,13 @@ using UnityEditor;
 using System.IO;
 using Services;
 using System.Net;
+using System;
 
-public class AppsFlyerEditor : ServiceEditor 
+public class AppsFlyerServiceEditor : ServiceEditor 
 {
-	const string PACKAGE_NAME = "AppsflyerPackage";
+	const string PACKAGE_NAME = "AppsFlyerPackage";
 
-	public AppsFlyerEditor(ServiceDef def)
+	public AppsFlyerServiceEditor(ServiceDef def)
         : base(def)
     {
 
@@ -18,16 +19,34 @@ public class AppsFlyerEditor : ServiceEditor
 
 	public override string GetName()
     {
-        return "Appflyer";
+        return "AppsFlyer";
     }
 
 	public override void OnInspectorGUI(ServiceDefEditor editor)
 	{
+		if(!IsValidate())
+        {
+            if(def.UseAppslovin)
+            {
+                def.UseAppslovin = false;
+                editor.RewriteDefine();
+            }
+
+            if (GreenButton("Download AppsFlyer Package"))
+            {
+                def.UseAppslovin = false;
+                DownloadPackage(editor);
+            }
+            
+            return;
+        }
+
 		if(!def.UseAppsFlyer)
 		{
 			if(GreenButton("Active AppsFlyer"))
 			{
 				def.UseAppsFlyer = true;
+				editor.RewriteDefine();
 			}
 			return;
 		}
@@ -40,12 +59,14 @@ public class AppsFlyerEditor : ServiceEditor
 		if(RedButton("Remove AppFlyer"))
 		{
 			def.UseAppsFlyer = false;
+			editor.RewriteDefine();
 		}
 	}
 
 	public override bool IsValidate()
 	{
-		return false;
+		Type type = Type.GetType("AppsFlyer, Assembly-CSharp-firstpass, Culture=neutral, PublicKeyToken=null");
+        return type != null;
 	}
 
 	public override void DownloadPackage(ServiceDefEditor editor)
@@ -54,9 +75,7 @@ public class AppsFlyerEditor : ServiceEditor
         if(!string.IsNullOrEmpty(link))
         {
             WebClient webClient = new WebClient();
-            Debug.Log("DOWN " + PACKAGE_NAME + link);
 			string destination = Application.dataPath + "/" + PACKAGE_NAME + ".unitypackage";
-            Debug.Log("DOWN TO:" + destination);
             webClient.DownloadFile(link, destination);
             AssetDatabase.Refresh();
             AssetDatabase.ImportPackage("Assets/" + PACKAGE_NAME +  ".unitypackage", true);
@@ -65,6 +84,9 @@ public class AppsFlyerEditor : ServiceEditor
 	
 	public override void OnWriteDefine(StreamWriter writer)
     {
-		writer.WriteLine("-define:SERVICE_APPSFLYER");
+		if(def.UseAppslovin)
+		{
+			writer.WriteLine("-define:SERVICE_APPSFLYER");
+		}
     }
 }

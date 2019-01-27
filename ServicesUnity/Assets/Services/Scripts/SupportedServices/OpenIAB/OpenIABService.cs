@@ -1,4 +1,4 @@
-﻿#if SSERVICE_OPENIAB
+﻿#if SERVICE_OPENIAB
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

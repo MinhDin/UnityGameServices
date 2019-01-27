@@ -47,7 +47,7 @@ namespace Services
         public string AppsFlyerKey;
 
         //Applovin
-        public bool UseApplovin;
+        public bool UseAppslovin;
         public string ApplovinKey;
 
         //Zendesk

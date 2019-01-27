@@ -10,8 +10,6 @@ using UnityEditor;
 
 namespace Services
 {
-
-
     public partial class ServiceEvents : ScriptableObject
     {
         //Common Game Events
@@ -20,6 +18,11 @@ namespace Services
         public Action<int> OnStartSession;
         public Action<int> OnLevelEnd;//careful
         public Action<bool> EnableSound;
+        public Action<int, int> OnTutorialStartStep; //step, maxStep
+        public Action<int, int> OnTutorialFinishStep; //step, maxStep
+        public Func<TimeSpan> GetTimeTick;
+        //public 
+        //public Action<
         //public Action<string, int> OnGetUserScore;//facebook ID, score
 
         //public Action<List<AGift>> OnGetGiftsFromFriends;

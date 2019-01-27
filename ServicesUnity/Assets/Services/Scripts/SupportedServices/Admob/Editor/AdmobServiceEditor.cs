@@ -74,7 +74,7 @@ public class AdmobServiceEditor : ServiceEditor
 
     public override bool IsValidate()
 	{
-        Type type = Type.GetType("GoogleMobileAds.Api.BannerView, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null");
+        Type type = Type.GetType("GoogleMobileAds.Api.BannerView, Assembly-CSharp, Culture=neutral, PublicKeyToken=null");
         return type != null;
 	}
 

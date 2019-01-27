@@ -13,7 +13,7 @@ namespace Services
         InterstitialAd interstitial;
         RewardBasedVideoAd rewardedVideo;
 
-        public override IService Init(SettingDef def, ServiceEvents gameE)
+        public override IService Init(ServiceDef def, ServiceEvents gameE)
         {
             if (!def.UseAdmob)
             {
@@ -28,9 +28,10 @@ namespace Services
             MobileAds.Initialize(def.AdmobAppID_Android);
 #endif
 
+#if UNITY_ADMOB_MEDIATION_APPLOVIN
             //Applovin
             GoogleMobileAds.Api.Mediation.AppLovin.AppLovin.Initialize();
-
+#endif
             rewardedVideo = RewardBasedVideoAd.Instance;
             // Called when an ad request has successfully loaded.
             rewardedVideo.OnAdLoaded += OnRewardVideoLoaded;
@@ -116,18 +117,23 @@ namespace Services
             string adUnitId = def.AdmobRewardedVideoID_IOS;
 #elif UNITY_ANDROID
             string adUnitId = def.AdmobRewardedVideoID_Android;
+#else
+            string adUnitId = "Editor ID";
 #endif
 
+#if UNITY_ADMOB_MEDIATION_VUNGLE
             GoogleMobileAds.Api.Mediation.Vungle.VungleRewardedVideoMediationExtras extras = new GoogleMobileAds.Api.Mediation.Vungle.VungleRewardedVideoMediationExtras();
 #if UNITY_ANDROID
     extras.SetAllPlacements(new string[] { "REWARDED-7542357" });
 #elif UNITY_IOS
     extras.SetAllPlacements(new string[] { "REWARDED-7542357" });
 #endif
-
+#endif
             AdRequest request = new AdRequest
                 .Builder()
+#if UNITY_ADMOB_MEDIATION_VUNGLE
                 .AddMediationExtras(extras)
+#endif
                 .Build();
 
             rewardedVideo.LoadAd(request, adUnitId);
@@ -248,6 +254,8 @@ namespace Services
             string adUnitId = def.AdmobInterstitialID_IOS;
 #elif UNITY_ANDROID
             string adUnitId = def.AdmobInterstitialID_Android;
+#else
+            string adUnitId = "Editor ID";
 #endif
             if (interstitial != null)
             {

@@ -8,7 +8,6 @@ namespace Services
 {
     public class AppsFlyerService : IService
     {
-
 		const string click_ad = "click_ad";
 		const string show_ad = "show_ad";
 		const string show_banner = "show_banner";
@@ -27,7 +26,7 @@ namespace Services
 		const string purchased_iap_package = "purchase_iap_package";
 		const string purchased_iap_value = "purchase_iap_value";
 
-        public override IService Init(SettingDef def, ServiceEvents events)
+        public override IService Init(ServiceDef def, ServiceEvents events)
         {
             if (!def.UseAppsFlyer)
             {
@@ -73,7 +72,6 @@ namespace Services
 			serviceE.OnPurchaseSucceeded += OnPurchasedIAPSuccess;
             return this;
         }
-
 
         public override void Dispose()
         {
@@ -145,24 +143,33 @@ namespace Services
 
 		void OnEndLevel(int endCount)
 		{
-			int day = Mathf.CeilToInt((float)(DateTime.Now.Subtract(UpdateSecondsFromInstall.INITIAL_DAY).TotalSeconds - PlayerPrefs.GetInt(UpdateSecondsFromInstall.SecondsFromAnchorKey, 0)) / (60 * 60 * 24));
-			if((endCount == 1) && (day == 1))
+			//int day = Mathf.CeilToInt((float)(DateTime.Now.Subtract(UpdateSecondsFromInstall.INITIAL_DAY).TotalSeconds - PlayerPrefs.GetInt(UpdateSecondsFromInstall.SecondsFromAnchorKey, 0)) / (60 * 60 * 24));
+			if(serviceE.GetTimeTick != null)
 			{
-				TrackEventNoParam(finish_1st_game_d1);
-			}
-			if(endCount == 2)
-			{
-				TrackEventNoParam(finish_2nd_game);				
-			}
-			else if(endCount == 3)
-			{
-				TrackEventNoParam(finish_3rd_game);
+				TimeSpan timeFromInstall = serviceE.GetTimeTick();
+				int day = timeFromInstall.Days;
+				if((endCount == 1) && (day == 1))
+				{
+					TrackEventNoParam(finish_1st_game_d1);
+				}
+				if(endCount == 2)
+				{
+					TrackEventNoParam(finish_2nd_game);				
+				}
+				else if(endCount == 3)
+				{
+					TrackEventNoParam(finish_3rd_game);
+				}
 			}
 		}
 
 		void OnStartSession(int totalSession)
 		{
-			int day = Mathf.CeilToInt((float)(DateTime.Now.Subtract(UpdateSecondsFromInstall.INITIAL_DAY).TotalSeconds - PlayerPrefs.GetInt(UpdateSecondsFromInstall.SecondsFromAnchorKey, 0)) / (60 * 60 * 24));
+			if(serviceE.GetTimeTick != null)
+			{
+				TimeSpan timeFromInstall = serviceE.GetTimeTick();
+				int day = timeFromInstall.Days;
+			
 			if(totalSession == 2)
 			{
 				if(day == 1)
@@ -174,11 +181,12 @@ namespace Services
 					TrackEventNoParam(open_2nd_session_d2);
 				}
 			}
+			}
 		}
 
-		void OnTutorialFinish(int step)
+		void OnTutorialFinish(int step, int maxStep)
 		{
-			if(step == 5)
+			if(step == maxStep)
 			{
 				TrackEventNoParam(finish_tutorial);
 			}
@@ -186,23 +194,29 @@ namespace Services
 
 		void OnCompetedRewardedAd(string adNetwork, string type, double amount)
 		{
+			#if USE_SERVICE_CPC
 			TrackingParameter[] trackParam = new TrackingParameter[1];
 			trackParam[0] = new TrackingParameter(af_revenue, CPCMgr.CPC_RewardedAds.ToString());
 			TrackEventParam(complete_rewarded_ads, trackParam);
+			#endif
 		}
 
 		void OnClickBanner(string adNetwork)
 		{
+			#if USE_SERVICE_CPC
 			TrackingParameter[] trackParam = new TrackingParameter[1];
 			trackParam[0] = new TrackingParameter(af_revenue, CPCMgr.CPC_Banner.ToString());
 			TrackEventParam(click_banner_ad, trackParam);
+			#endif
 		}
 
 		void OnClickInterstitial(string adNetwork)
 		{
+			#if USE_SERVICE_CPC
 			TrackingParameter[] trackParam = new TrackingParameter[1];
 			trackParam[0] = new TrackingParameter(af_revenue, CPCMgr.CPC_Interstitial.ToString());
 			TrackEventParam(click_interstitial_ad, trackParam);
+			#endif
 		}
 
 		void OnClickAd(string adNetwork)
