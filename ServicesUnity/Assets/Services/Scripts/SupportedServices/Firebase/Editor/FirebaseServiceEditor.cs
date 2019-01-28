@@ -12,12 +12,14 @@ using UnityEngine.Networking;
 public class FirebaseServiceEditor : ServiceEditor 
 {
 	public const string PACKAGE_NAME = "FirebasePackage";
-	FirebaseAnalyticsEditor analytics;
-	FirebaseRealtimeDatabaseEditor realtimeDatabase;
+	public List<string> PackagesName{get{return packagesName;}}
+	List<string> packagesName;
 	
 	ServiceEditor[] fbServices;
 	string[] toolbar;
 	int toolbarIndex;
+	
+	UnityWebRequest request;
 
 	public FirebaseServiceEditor(ServiceDef def)
         : base(def)
@@ -29,6 +31,18 @@ public class FirebaseServiceEditor : ServiceEditor
 			new FirebaseRealtimeDatabaseEditor(def),
 		};
 		toolbar = fbServices.Select(x => x.GetName()).ToArray();
+
+		EditorApplication.update += Update;
+    }
+
+	private void Update()
+    {
+		if((request != null) && (request.isDone))
+		{
+			request = null;
+			string destination = Application.dataPath + "/" + PACKAGE_NAME + ".zip";
+			packagesName = DecompressSharpZip(destination, Application.dataPath + "/" + PACKAGE_NAME);
+		}
     }
 
 	public override string GetName()
@@ -104,9 +118,10 @@ public class FirebaseServiceEditor : ServiceEditor
     {
 		if(def.UseFirebase)
 		{
-			writer.WriteLine("-define:SERVICE_FIREBASE");
-			analytics.OnWriteDefine(writer);
-			realtimeDatabase.OnWriteDefine(writer);
+			foreach (ServiceEditor sv in fbServices)
+			{
+				sv.OnWriteDefine(writer);
+			}			
 		}
     }
 }

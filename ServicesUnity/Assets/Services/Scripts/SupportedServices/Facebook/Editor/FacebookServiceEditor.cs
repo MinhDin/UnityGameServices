@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using UnityEditor;
-using System.IO;
 using Services;
 using System.Net;
 using System;
@@ -31,7 +30,7 @@ public class FacebookServiceEditor : ServiceEditor
 			List<string> rs = DecompressSharpZip(destination, Application.dataPath + "/" + PACKAGE_NAME);
 			foreach(string file in rs)
 			{
-				if(file.Contains("unitypackage"))
+				if(file.Contains("unitypackage") && file.Contains("facebook-unity"))
 				{
 					string packagePath = "Assets/" + PACKAGE_NAME + "/" + file;
 					Debug.Log("Import :" + packagePath);
