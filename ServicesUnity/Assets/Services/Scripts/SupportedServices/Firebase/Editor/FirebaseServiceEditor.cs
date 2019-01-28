@@ -4,10 +4,14 @@ using UnityEngine;
 using System.IO;
 using Services;
 using System.Linq;
+using UnityEditor;
+using System.Net;
+using System;
+using UnityEngine.Networking;
 
 public class FirebaseServiceEditor : ServiceEditor 
 {
-	public const string PACKAGE_ROOT = "FirebasePackage";
+	public const string PACKAGE_NAME = "FirebasePackage";
 	FirebaseAnalyticsEditor analytics;
 	FirebaseRealtimeDatabaseEditor realtimeDatabase;
 	
@@ -25,9 +29,6 @@ public class FirebaseServiceEditor : ServiceEditor
 			new FirebaseRealtimeDatabaseEditor(def),
 		};
 		toolbar = fbServices.Select(x => x.GetName()).ToArray();
-
-		analytics = new FirebaseAnalyticsEditor(def);
-		realtimeDatabase = new FirebaseRealtimeDatabaseEditor(def);
     }
 
 	public override string GetName()
@@ -37,6 +38,24 @@ public class FirebaseServiceEditor : ServiceEditor
 
 	public override void OnInspectorGUI(ServiceDefEditor editor)
 	{
+		if (!IsValidate())
+        {
+            if (def.UseFirebase)
+            {
+                def.UseFirebase = false;
+                editor.RewriteDefine();
+            }
+
+            if (GreenButton("Download Firebase Package"))
+            {
+                def.UseFirebase = false;
+				Debug.Log("Begin download.");
+                DownloadPackage(editor);
+				Debug.Log("After download.");
+            }
+            return;
+        }
+
 		if(!def.UseFirebase)
 		{
 			if(GreenButton("Active Firebase"))
@@ -64,12 +83,21 @@ public class FirebaseServiceEditor : ServiceEditor
 
 	public override bool IsValidate()
 	{
-		return true;
+		return FileExist(PACKAGE_NAME);
 	}
 
 	public override void DownloadPackage(ServiceDefEditor editor)
 	{
+		string link = editor.GetDownloadLinkByKey(PACKAGE_NAME);
+        if (!string.IsNullOrEmpty(link))
+        {
+            Debug.Log("DOWN " + PACKAGE_NAME + link);
+            string destination = Application.dataPath + "/" + PACKAGE_NAME + ".zip";
+            Debug.Log("DOWN TO:" + destination);
 
+			ServiceDownloadWindow downloadWindow = ServiceDownloadWindow.ShowWindow();
+			downloadWindow.Download(link, destination);
+        }
 	}
 	
 	public override void OnWriteDefine(StreamWriter writer)
