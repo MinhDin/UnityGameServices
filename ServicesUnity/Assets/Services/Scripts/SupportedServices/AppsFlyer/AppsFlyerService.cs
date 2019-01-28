@@ -194,29 +194,50 @@ namespace Services
 
 		void OnCompetedRewardedAd(string adNetwork, string type, double amount)
 		{
-			#if USE_SERVICE_CPC
-			TrackingParameter[] trackParam = new TrackingParameter[1];
-			trackParam[0] = new TrackingParameter(af_revenue, CPCMgr.CPC_RewardedAds.ToString());
-			TrackEventParam(complete_rewarded_ads, trackParam);
-			#endif
+#if USE_SERVICE_CPC
+			if(serviceE.CPC_RewardedAds != null)
+			{
+				TrackingParameter[] trackParam = new TrackingParameter[1];
+				trackParam[0] = new TrackingParameter(af_revenue, serviceE.CPC_RewardedAds());
+				TrackEventParam(complete_rewarded_ads, trackParam);
+			}
+			else
+			{
+				Debug.LogError("Fail to send appsflyer Click Banner CPC");
+			}
+#endif
 		}
 
 		void OnClickBanner(string adNetwork)
 		{
-			#if USE_SERVICE_CPC
-			TrackingParameter[] trackParam = new TrackingParameter[1];
-			trackParam[0] = new TrackingParameter(af_revenue, CPCMgr.CPC_Banner.ToString());
-			TrackEventParam(click_banner_ad, trackParam);
-			#endif
+#if USE_SERVICE_CPC
+			if(serviceE.CPC_Banner != null)
+			{
+				TrackingParameter[] trackParam = new TrackingParameter[1];
+				trackParam[0] = new TrackingParameter(af_revenue, serviceE.CPC_Banner());
+				TrackEventParam(click_banner_ad, trackParam);
+			}
+			else
+			{
+				Debug.LogError("Fail to send appsflyer Click Banner CPC");
+			}
+#endif
 		}
 
 		void OnClickInterstitial(string adNetwork)
 		{
-			#if USE_SERVICE_CPC
-			TrackingParameter[] trackParam = new TrackingParameter[1];
-			trackParam[0] = new TrackingParameter(af_revenue, CPCMgr.CPC_Interstitial.ToString());
-			TrackEventParam(click_interstitial_ad, trackParam);
-			#endif
+#if USE_SERVICE_CPC
+			if(serviceE.CPC_Interstitial != null)
+			{
+				TrackingParameter[] trackParam = new TrackingParameter[1];
+				trackParam[0] = new TrackingParameter(af_revenue, serviceE.CPC_Interstitial());
+				TrackEventParam(click_interstitial_ad, trackParam);
+			}
+			else
+			{
+				Debug.LogError("Fail to send appsflyer Click Banner CPC");
+			}
+#endif
 		}
 
 		void OnClickAd(string adNetwork)

@@ -97,6 +97,8 @@ public class ServiceDefEditor : Editor
 						Link="https://origincache.facebook.com/developers/resources/?id=FacebookSDK-current.zip"},
 					new DownloadLink{Name = "FirebasePackage",
 						Link="https://dl.google.com/firebase/sdk/unity/firebase_unity_sdk_5.4.4.zip"},
+					new DownloadLink{Name = "OpenIABPackage",
+						Link="https://github.com/onepf/OpenIAB/releases/download/0.9.8.6/openiab-plugin-0.9.8.6.unitypackage"},	
 				};
 				writer = new StreamWriter(SERVICES_LINK_PATH, false);
 				writer.Write(JsonUtility.ToJson(link));

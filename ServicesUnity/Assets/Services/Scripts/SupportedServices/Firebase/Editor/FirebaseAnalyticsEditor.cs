@@ -20,16 +20,42 @@ public class FirebaseAnalyticsEditor : ServiceEditor
 
 	public override void OnInspectorGUI(ServiceDefEditor editor)
 	{
-		def.UseFBRealtimeDatabase = BoldToggle("Use Realtime Database", def.UseFBRealtimeDatabase);
+		if(!IsValidate())
+        {
+            if(def.UseFBAnalytics)
+            {
+                def.UseFBAnalytics = false;
+                editor.RewriteDefine();
+            }
 
-		if(def.UseFBRealtimeDatabase)
-		{
-			def.FirebaseDatabaseURL = EditorGUILayout.TextField("> Database URL", def.FirebaseDatabaseURL);
+            if (GreenButton("Import Firebase Package"))
+            {
+                def.UseFBAnalytics = false;
+                DownloadPackage(editor);
+            }
+            
+            return;
+        }
+        if (!def.UseFBAnalytics)
+        {
+            if (GreenButton("Active Firebase Analytics"))
+            {
+                def.UseFBAnalytics = true;
+                editor.RewriteDefine();
+            }
+            else
+            {
+                return;
+            }
+        }
 
-			def.UseFBLeaderBoard = BoldToggle("Use Leader Board", def.UseFBLeaderBoard);
-		}
-
-		RemoteDatabaseValidate();
+		//end section
+        GUILayout.Space(50);
+        if (RedButton("Remove Firebase Analytics"))
+        {
+            def.UseFBAnalytics = false;
+            editor.RewriteDefine();
+        }
 	}
 
 	void RemoteDatabaseValidate()

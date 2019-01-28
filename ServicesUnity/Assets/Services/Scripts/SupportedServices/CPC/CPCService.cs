@@ -6,7 +6,11 @@ using System;
 using System.IO;
 using UnityEngine.Networking;
 
-#if USING_REMOTE_CONFIG
+#if SERVICE_FIREBASE && SERVICE_FIREBASE_REMOTECONFIG
+#define FIREBASE_REMOTE_AVAILABLE
+#endif
+
+#if FIREBASE_REMOTE_AVAILABLE
 using Firebase.RemoteConfig;
 #endif
 
@@ -87,9 +91,9 @@ public class CPCMgr : MonoBehaviour
             for (int i = 0; i < numberOfTry; i++)
             {
                 //Debug.Log(i + " time try");
-#if USING_REMOTE_CONFIG
+#if FIREBASE_REMOTE_AVAILABLE
                 //Get Remote Config parameter
-                ConfigValue cv = FirebaseRemoteConfig.GetValue(DefaultRemoteConfig.CPC_URL);
+                ConfigValue cv = FirebaseRemoteConfig.GetValue(def.RemoteConfigLink);
                 //Debug.Log("Source : " + cv.Source);
                 bool hasConnection = (cv.Source == ValueSource.RemoteValue);
 #if !UNITY_EDITOR
@@ -106,7 +110,7 @@ public class CPCMgr : MonoBehaviour
                 }
 #endif
 #endif
-                #if USING_REMOTE_CONFIG
+                #if FIREBASE_REMOTE_AVAILABLE
                 string url = cv.StringValue;
                 #else
                 string url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTdlH9VAxcEgctKub30ojfnURR99gdYudZG2qwxYStgDojyf4VPHT14ERVTxu4LpYuwGCl-YmcF3udY/pub?output=csv";

@@ -1,4 +1,4 @@
-﻿#if SSERVICE_FIREBASE
+﻿#if SERVICE_FIREBASE
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
