@@ -17,6 +17,7 @@ namespace Services
         //Firebase services
         public bool UseFirebase;
         public bool UseFBAnalytics;
+        public bool UseFBRemoteConfig;
         public bool UseFBRealtimeDatabase;
         public bool UseFBLeaderBoard;
         public string FirebaseDatabaseURL = "https://word-link-e5bcf.firebaseio.com/";

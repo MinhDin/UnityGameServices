@@ -34,7 +34,6 @@ public class ImportPackageQueue
 
     public void ImportPackage(string package)
     {
-        Debug.Log("Import " + package);
         packages.Enqueue(package);
     }
 
@@ -44,25 +43,21 @@ public class ImportPackageQueue
         {
             isImporting = true;
             string package = packages.Dequeue();
-            Debug.Log("Import From Queue " + package);
             AssetDatabase.ImportPackage(package, true);
         }
     }
 
     void OnReload()
     {
-        Debug.Log("Reload script");
         isImporting = false;
     }
     void OnImportEnd(string packagesName)
     {
-        Debug.Log("Import End");
         isImporting = false;
     }
 
     void OnImportFailed(string packageName, string error)
     {
-        Debug.Log("Import FAILED");
         isImporting = false;
     }
 }

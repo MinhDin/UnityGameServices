@@ -12,79 +12,99 @@ using System.Linq;
 public class ServiceDefEditor : Editor
 {
 
-	string DEFINE_FILE_PATH;
-	string SUPPORTED_SERVICES_PATH;
-	string SERVICES_LINK_PATH = "Assets/Services/ServicesLink.json";
+    string DEFINE_FILE_PATH;
+    string SUPPORTED_SERVICES_PATH;
+    string SERVICES_LINK_PATH = "Assets/Services/ServicesLink.json";
 
-	ServiceDef def;
-	static StreamWriter writer;
-	//static
-	static bool[] foldout;
-	static int foldoutIndex;
-	static string[] toolbar;
-	static int toolbarIndex;	
-	static string error;
-	static List<ServiceEditor> services;
-	static ServicesLink link;
-	static ImportPackageQueue importPackage;
-	bool initStaticServices;
+    ServiceDef def;
+    static StreamWriter writer;
+    //static
+    static bool[] foldout;
+    static int foldoutIndex;
+    static string[] toolbar;
+    static int toolbarIndex;
+    static string error;
+    static List<ServiceEditor> services;
+    static ServicesLink link;
+    static ImportPackageQueue importPackage;
+    bool initStaticServices;
 
-	static ServiceDefEditor()
-	{		
-		InitStatic();
-	}
-	
-	static void InitStatic()
-	{
-		toolbarIndex = 0;
-		foldoutIndex = 0;
-		foldout = new bool[50];
-		importPackage = ImportPackageQueue.Instance;
-		//toolbar = new string[]{"Firebase", "OpenIAB", "Facebook", "Admob", "Flurry", "AppFlyer", "Applovin", "Zendesk"};		
+    static ServiceDefEditor()
+    {
+        InitStatic();
+    }
 
-		if(services == null)
-		{
-			services = new List<ServiceEditor>();
-		}
-	}
+    static void InitStatic()
+    {
+        toolbarIndex = 0;
+        foldoutIndex = 0;
+        foldout = new bool[50];
+        importPackage = ImportPackageQueue.Instance;
+        //toolbar = new string[]{"Firebase", "OpenIAB", "Facebook", "Admob", "Flurry", "AppFlyer", "Applovin", "Zendesk"};		
 
-	private void OnEnable()
-	{
-		def = target as ServiceDef;
-	}
+        if (services == null)
+        {
+            services = new List<ServiceEditor>();
+        }
+    }
 
-	public void RewriteDefine()
-	{
-		writer = new StreamWriter(DEFINE_FILE_PATH, false);
-		//writer.WriteLine("//This file is generated automatically by LavaServices. Please don't modify. It assumes you don't use this file.:\">");
-		int len = services.Count;
-		for(int i = 0; i < len; ++i)
-		{
-			services[i].OnWriteDefine(writer);
-		}
-		writer.Close();
-		AssetDatabase.Refresh();
-		AssetDatabase.SaveAssets();
-		AssetDatabase.ImportAsset("Assets/Services/Scripts/Editor/ServiceDefEditor.cs");
-	}
+    private void OnEnable()
+    {
+        def = target as ServiceDef;
+    }
+
+    public void RewriteDefine()
+    {
+        writer = new StreamWriter(DEFINE_FILE_PATH, false);
+        //writer.WriteLine("//This file is generated automatically by LavaServices. Please don't modify. It assumes you don't use this file.:\">");
+        int len = services.Count;
+        for (int i = 0; i < len; ++i)
+        {
+            services[i].OnWriteDefine(writer);
+        }
+        writer.Close();
+        AssetDatabase.Refresh();
+        AssetDatabase.SaveAssets();
+        AssetDatabase.ImportAsset("Assets/Services/Scripts/Editor/ServiceDefEditor.cs");
+    }
 #if WRITE_JSON_LINK
 	bool a;
 #endif
-	public override void OnInspectorGUI()
-	{
-		if(!initStaticServices)
-		{
-			
-			if(services == null)
-			{
-				services = new List<ServiceEditor>();
-			}
-			services.Clear();
-			initStaticServices = true;
-			DEFINE_FILE_PATH = Application.dataPath + "/csc.rsp";
-			SUPPORTED_SERVICES_PATH = Application.dataPath + "/Services/Scripts/SupportedServices";
 
-			#if WRITE_JSON_LINK
+    void GetAllServices()
+    {
+        services.Clear();
+
+        string[] directories = Directory.GetDirectories(SUPPORTED_SERVICES_PATH);
+        int lenDir = directories.Length;
+
+        for (int i = 0; i < lenDir; ++i)
+        {
+            string classType = new DirectoryInfo(directories[i]).Name + "ServiceEditor";
+            Type type = Type.GetType(classType);
+            if (type != null)
+            {
+                services.Add((ServiceEditor)Activator.CreateInstance(type, (object)def));
+            }
+        }
+
+        toolbar = services.Select(x => x.GetName()).ToArray();
+    }
+
+    public override void OnInspectorGUI()
+    {
+        if (!initStaticServices)
+        {
+            if (services == null)
+            {
+                services = new List<ServiceEditor>();
+            }
+
+            initStaticServices = true;
+            DEFINE_FILE_PATH = Application.dataPath + "/csc.rsp";
+            SUPPORTED_SERVICES_PATH = Application.dataPath + "/Services/Scripts/SupportedServices";
+
+#if WRITE_JSON_LINK
 			if(!a)
 			{
 				ServicesLink link = new ServicesLink();
@@ -105,82 +125,65 @@ public class ServiceDefEditor : Editor
 				writer.Close();
 			}
 			return;
-			#endif
+#endif
 
-			TextAsset linkJson = AssetDatabase.LoadAssetAtPath(SERVICES_LINK_PATH, typeof(TextAsset)) as TextAsset;
-			if(linkJson != null)
-			{
-				link = JsonUtility.FromJson<ServicesLink>(linkJson.text);
-			}
-			else
-			{
-				initStaticServices = false;
-				Debug.LogError("File not found : " + SERVICES_LINK_PATH);
-				return;
-			}
+            TextAsset linkJson = AssetDatabase.LoadAssetAtPath(SERVICES_LINK_PATH, typeof(TextAsset)) as TextAsset;
+            if (linkJson != null)
+            {
+                link = JsonUtility.FromJson<ServicesLink>(linkJson.text);
+            }
+            else
+            {
+                initStaticServices = false;
+                Debug.LogError("File not found : " + SERVICES_LINK_PATH);
+                return;
+            }
 
-			new ServiceEditor(null);
-			string[] directories = Directory.GetDirectories(SUPPORTED_SERVICES_PATH);
-			int lenDir = directories.Length;
-			
-			for(int i = 0; i < lenDir; ++i)
-			{
-				string classType = new DirectoryInfo(directories[i]).Name + "ServiceEditor";
-				Type type = Type.GetType(classType);
-				if(type != null)
-				{
-					services.Add((ServiceEditor)Activator.CreateInstance(type, (object)def));
-				}
-			}
+            new ServiceEditor(null);
 
-			toolbar = services.Select(x => x.GetName()).ToArray();
-		}
+			GetAllServices();
+        }
 
-		//validate variables
-		if(foldout == null)
-		{
-			InitStatic();
-		}
-		
-		if(services.Count == 0)
-		{
-			Debug.Log("Can't find any services.");
-			return;
-		}
-		error = string.Empty;
-		foldoutIndex = 0;
-		
-		//============
+        //validate variables
+        if (foldout == null)
+        {
+            InitStatic();
+        }
 
-		toolbarIndex = GUILayout.Toolbar(toolbarIndex, toolbar);
-		int len = services.Count;
-		toolbarIndex = Mathf.Min(toolbarIndex, len - 1);
-		services[toolbarIndex].OnInspectorGUI(this);
+        if (services.Count == 0)
+        {
+            GetAllServices();
+            return;
+        }
+        error = string.Empty;
+        foldoutIndex = 0;
 
-		GUILayout.Space(50);
-		if(!string.IsNullOrEmpty(error))
-		{
-			//RedLabel(error);
-		}
+        //============
 
-		if(GUI.changed)
-		{
-			EditorUtility.SetDirty(def);
-		}
-	}
+        toolbarIndex = GUILayout.Toolbar(toolbarIndex, toolbar);
+        int len = services.Count;
+        toolbarIndex = Mathf.Min(toolbarIndex, len - 1);
+        services[toolbarIndex].OnInspectorGUI(this);
 
-	public string GetDownloadLinkByKey(string key)
-	{
-		if(link != null)
-		{
-			return link.GetDownloadLinkByKey(key);
-		}
+        GUILayout.Space(50);
+        if (!string.IsNullOrEmpty(error))
+        {
+            //RedLabel(error);
+        }
 
-		return string.Empty;
-	}
+        if (GUI.changed)
+        {
+            EditorUtility.SetDirty(def);
+        }
+    }
 
-	void GetAllService()
-	{
+    public string GetDownloadLinkByKey(string key)
+    {
+        if (link != null)
+        {
+            return link.GetDownloadLinkByKey(key);
+        }
 
-	}
+        return string.Empty;
+    }
 }

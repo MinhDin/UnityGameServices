@@ -1,4 +1,4 @@
-﻿#if SSERVICE_FIREBASE
+﻿#if SERVICE_FIREBASE
 #if SERVICE_FIREBASE_ANALYTICS
 using System.Collections;
 using System.Collections.Generic;
@@ -69,8 +69,7 @@ namespace Services
                 }
                 
             }
-            Firebase.Analytics.FirebaseAnalytics.LogEvent(eventName, sendParam);
-            
+            Firebase.Analytics.FirebaseAnalytics.LogEvent(eventName, sendParam);        
         }
 
         void TrackEventNoParam(string eventName)

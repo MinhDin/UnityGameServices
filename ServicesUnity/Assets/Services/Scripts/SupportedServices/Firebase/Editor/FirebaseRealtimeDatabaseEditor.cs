@@ -4,13 +4,16 @@ using UnityEngine;
 using UnityEditor;
 using System.IO;
 using Services;
+using System;
 
 public class FirebaseRealtimeDatabaseEditor : ServiceEditor 
 {
-	public FirebaseRealtimeDatabaseEditor(ServiceDef def)
+	FirebaseServiceEditor firebase;
+
+    public FirebaseRealtimeDatabaseEditor(ServiceDef def, FirebaseServiceEditor firebase)
         : base(def)
     {
-
+		this.firebase = firebase;
     }
 
 	public override string GetName()
@@ -20,16 +23,47 @@ public class FirebaseRealtimeDatabaseEditor : ServiceEditor
 
 	public override void OnInspectorGUI(ServiceDefEditor editor)
 	{
-		def.UseFBRealtimeDatabase = BoldToggle("Use Realtime Database", def.UseFBRealtimeDatabase);
+		if(!IsValidate())
+        {
+            if(def.UseFBRealtimeDatabase)
+            {
+                def.UseFBRealtimeDatabase = false;
+                editor.RewriteDefine();
+            }
 
-		if(def.UseFBRealtimeDatabase)
-		{
-			def.FirebaseDatabaseURL = EditorGUILayout.TextField("> Database URL", def.FirebaseDatabaseURL);
+            if (GreenButton("Import Firebase Remote Config Package"))
+            {
+                def.UseFBRealtimeDatabase = false;
 
-			def.UseFBLeaderBoard = BoldToggle("Use Leader Board", def.UseFBLeaderBoard);
-		}
+                if((firebase.PackagesName != null) && (firebase.PackagesName.Count > 0))
+                {
+                    string finalName = firebase.PackagesName.Find(x => x.Contains("Analytics"));
+                    ImportPackageQueue.Instance.ImportPackage(firebase.PackagePath + "/" + finalName);
+                }
+            }
+            
+            return;
+        }
+        if (!def.UseFBRealtimeDatabase)
+        {
+            if (GreenButton("Active Firebase Remote Config"))
+            {
+                def.UseFBRealtimeDatabase = true;
+                editor.RewriteDefine();
+            }
+            else
+            {
+                return;
+            }
+        }
 
-		RemoteDatabaseValidate();
+		//end section
+        GUILayout.Space(50);
+        if (RedButton("Remove Firebase Remote Config"))
+        {
+            def.UseFBRealtimeDatabase = false;
+            editor.RewriteDefine();
+        }
 	}
 
 	void RemoteDatabaseValidate()
@@ -47,13 +81,10 @@ public class FirebaseRealtimeDatabaseEditor : ServiceEditor
 
 	public override bool IsValidate()
 	{
-		return false;
+		Type type = Type.GetType("Firebase.RemoteConfig.FirebaseRemoteConfig, Firebase.RemoteConfig, Culture=neutral, PublicKeyToken=null");
+		return type != null;
 	}
 
-	public override void DownloadPackage(ServiceDefEditor editor)
-	{
-
-	}
 	
 	public override void OnWriteDefine(StreamWriter writer)
     {

@@ -4,13 +4,16 @@ using UnityEngine;
 using UnityEditor;
 using System.IO;
 using Services;
+using System;
 
 public class FirebaseAnalyticsEditor : ServiceEditor 
 {
-	public FirebaseAnalyticsEditor(ServiceDef def)
+    FirebaseServiceEditor firebase;
+
+	public FirebaseAnalyticsEditor(ServiceDef def, FirebaseServiceEditor firebase)
         : base(def)
     {
-
+        this.firebase = firebase;
     }
 
 	public override string GetName()
@@ -28,14 +31,19 @@ public class FirebaseAnalyticsEditor : ServiceEditor
                 editor.RewriteDefine();
             }
 
-            if (GreenButton("Import Firebase Package"))
+            if (GreenButton("Import Firebase Analytics Package"))
             {
                 def.UseFBAnalytics = false;
-                DownloadPackage(editor);
+                if((firebase.PackagesName != null) && (firebase.PackagesName.Count > 0))
+                {
+                    string finalName = firebase.PackagesName.Find(x => x.Contains("Analytics"));
+                    ImportPackageQueue.Instance.ImportPackage(firebase.PackagePath + "/" + finalName);
+                }
             }
             
             return;
         }
+
         if (!def.UseFBAnalytics)
         {
             if (GreenButton("Active Firebase Analytics"))
@@ -73,12 +81,8 @@ public class FirebaseAnalyticsEditor : ServiceEditor
 
 	public override bool IsValidate()
 	{
-		return false;
-	}
-
-	public override void DownloadPackage(ServiceDefEditor editor)
-	{
-
+        Type type = Type.GetType("Firebase.Analytics.FirebaseAnalytics, Firebase.Analytics, Culture=neutral, PublicKeyToken=null");
+		return type != null;
 	}
 	
 	public override void OnWriteDefine(StreamWriter writer)

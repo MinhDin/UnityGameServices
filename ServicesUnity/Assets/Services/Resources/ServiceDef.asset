@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AppID_IOS: 1373182463
   PackageName: 
-  UseFirebase: 0
-  UseFBAnalytics: 1
+  UseFirebase: 1
+  UseFBAnalytics: 0
   UseFBRealtimeDatabase: 1
   UseFBLeaderBoard: 1
   FirebaseDatabaseURL: https://word-link-e5bcf.firebaseio.com/

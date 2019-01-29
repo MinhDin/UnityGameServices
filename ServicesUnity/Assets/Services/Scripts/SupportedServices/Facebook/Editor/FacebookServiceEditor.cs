@@ -32,7 +32,6 @@ public class FacebookServiceEditor : ServiceEditor
 				if(file.Contains("unitypackage") && file.Contains("facebook-unity"))
 				{
 					string packagePath = "Assets/" + PACKAGE_NAME + "/" + file;
-					Debug.Log("Import :" + packagePath);
 					//AssetDatabase.ImportPackage(packagePath, true);
 					ImportPackageQueue.Instance.ImportPackage(packagePath);
 				}
@@ -78,9 +77,7 @@ public class FacebookServiceEditor : ServiceEditor
             if (GreenButton("Download Facebook Package"))
             {
                 def.UseFacebook = false;
-				Debug.Log("Begin download.");
                 DownloadPackage(editor);
-				Debug.Log("After download.");
             }
             return;
         }

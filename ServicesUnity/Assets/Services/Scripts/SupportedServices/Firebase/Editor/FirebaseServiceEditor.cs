@@ -10,9 +10,8 @@ using System;
 using UnityEngine.Networking;
 
 public class FirebaseServiceEditor : ServiceEditor 
-{
-	public const string PACKAGE_NAME = "FirebasePackage";
-	
+{	
+	public string PackagePath {get{return packagePath;}}
 	ServiceEditor[] fbServices;
 	string[] toolbar;
 	int toolbarIndex;
@@ -22,9 +21,9 @@ public class FirebaseServiceEditor : ServiceEditor
     {
 		fbServices = new ServiceEditor[]
 		{
-			new FirebaseAnalyticsEditor(def),
-			new FirebaseRemoteConfigEditor(def),
-			new FirebaseRealtimeDatabaseEditor(def),
+			new FirebaseAnalyticsEditor(def, this),
+			new FirebaseRemoteConfigEditor(def, this),
+			new FirebaseRealtimeDatabaseEditor(def, this),
 		};
 		toolbar = fbServices.Select(x => x.GetName()).ToArray();
 
@@ -82,7 +81,7 @@ public class FirebaseServiceEditor : ServiceEditor
 
 	public override bool IsValidate()
 	{
-		return FileExist(PACKAGE_NAME);
+		return DirectoryExist(packagePath);
 	}
 
 	public override void OnWriteDefine(StreamWriter writer)
