@@ -12,14 +12,10 @@ using UnityEngine.Networking;
 public class FirebaseServiceEditor : ServiceEditor 
 {
 	public const string PACKAGE_NAME = "FirebasePackage";
-	public List<string> PackagesName{get{return packagesName;}}
-	List<string> packagesName;
 	
 	ServiceEditor[] fbServices;
 	string[] toolbar;
 	int toolbarIndex;
-	
-	UnityWebRequest request;
 
 	public FirebaseServiceEditor(ServiceDef def)
         : base(def)
@@ -32,17 +28,8 @@ public class FirebaseServiceEditor : ServiceEditor
 		};
 		toolbar = fbServices.Select(x => x.GetName()).ToArray();
 
-		EditorApplication.update += Update;
-    }
-
-	private void Update()
-    {
-		if((request != null) && (request.isDone))
-		{
-			request = null;
-			string destination = Application.dataPath + "/" + PACKAGE_NAME + ".zip";
-			packagesName = DecompressSharpZip(destination, Application.dataPath + "/" + PACKAGE_NAME);
-		}
+		packagePath = "FirebasePackage";
+		RegisterUpdate();
     }
 
 	public override string GetName()
@@ -63,9 +50,7 @@ public class FirebaseServiceEditor : ServiceEditor
             if (GreenButton("Download Firebase Package"))
             {
                 def.UseFirebase = false;
-				Debug.Log("Begin download.");
                 DownloadPackage(editor);
-				Debug.Log("After download.");
             }
             return;
         }
@@ -100,20 +85,6 @@ public class FirebaseServiceEditor : ServiceEditor
 		return FileExist(PACKAGE_NAME);
 	}
 
-	public override void DownloadPackage(ServiceDefEditor editor)
-	{
-		string link = editor.GetDownloadLinkByKey(PACKAGE_NAME);
-        if (!string.IsNullOrEmpty(link))
-        {
-            Debug.Log("DOWN " + PACKAGE_NAME + link);
-            string destination = Application.dataPath + "/" + PACKAGE_NAME + ".zip";
-            Debug.Log("DOWN TO:" + destination);
-
-			ServiceDownloadWindow downloadWindow = ServiceDownloadWindow.ShowWindow();
-			downloadWindow.Download(link, destination);
-        }
-	}
-	
 	public override void OnWriteDefine(StreamWriter writer)
     {
 		if(def.UseFirebase)

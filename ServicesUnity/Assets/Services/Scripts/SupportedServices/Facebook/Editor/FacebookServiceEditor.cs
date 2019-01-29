@@ -12,15 +12,34 @@ public class FacebookServiceEditor : ServiceEditor
 {
     const string PACKAGE_NAME = "FacebookPackage";
 
-    delegate void ProgressDelegate(string sMessage);
-
-	UnityWebRequest request;
+	//UnityWebRequest request;
     public FacebookServiceEditor(ServiceDef def)
         : base(def)
     {
-        EditorApplication.update += Update;
+        //EditorApplication.update += Update;
+        packagePath = "FacebookPackage";
+		RegisterUpdate();
     }
 
+    protected override void Update()
+    {
+        bool lastRequest = request != null;
+        base.Update();
+        if(lastRequest && (request == null) && PackagesName != null)
+        {
+            foreach(string file in PackagesName)
+			{
+				if(file.Contains("unitypackage") && file.Contains("facebook-unity"))
+				{
+					string packagePath = "Assets/" + PACKAGE_NAME + "/" + file;
+					Debug.Log("Import :" + packagePath);
+					//AssetDatabase.ImportPackage(packagePath, true);
+					ImportPackageQueue.Instance.ImportPackage(packagePath);
+				}
+			}
+        }
+    }
+/*
     private void Update()
     {
 		if((request != null) && (request.isDone))
@@ -40,7 +59,7 @@ public class FacebookServiceEditor : ServiceEditor
 			}
 		}
     }
-
+*/
     public override string GetName()
     {
         return "Facebook";
@@ -89,7 +108,7 @@ public class FacebookServiceEditor : ServiceEditor
     {
         return false;
     }
-
+/*
     public override void DownloadPackage(ServiceDefEditor editor)
     {
         string link = editor.GetDownloadLinkByKey(PACKAGE_NAME);
@@ -103,7 +122,7 @@ public class FacebookServiceEditor : ServiceEditor
 			request = downloadWindow.Download(link, destination);
         }
     }	
-
+*/
     public override void OnWriteDefine(StreamWriter writer)
     {
         if (def.UseFacebook)
