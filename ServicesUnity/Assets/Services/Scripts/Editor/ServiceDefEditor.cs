@@ -22,7 +22,7 @@ public class ServiceDefEditor : Editor
     static bool[] foldout;
     static int foldoutIndex;
     static string[] toolbar;
-    static int toolbarIndex;
+    static int toolbarIndex = -1;
     static string error;
     static List<ServiceEditor> services;
     static ServicesLink link;
@@ -160,9 +160,17 @@ public class ServiceDefEditor : Editor
 
         //============
 
+        int lastIndex = toolbarIndex;
+
         toolbarIndex = GUILayout.Toolbar(toolbarIndex, toolbar);
         int len = services.Count;
         toolbarIndex = Mathf.Min(toolbarIndex, len - 1);
+
+        if(lastIndex != toolbarIndex)
+        {
+            services[toolbarIndex].OnEnable();
+        }
+
         services[toolbarIndex].OnInspectorGUI(this);
 
         GUILayout.Space(50);

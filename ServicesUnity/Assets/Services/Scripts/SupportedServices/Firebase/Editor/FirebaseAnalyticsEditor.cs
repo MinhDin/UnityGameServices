@@ -37,7 +37,7 @@ public class FirebaseAnalyticsEditor : ServiceEditor
                 if((firebase.PackagesName != null) && (firebase.PackagesName.Count > 0))
                 {
                     string finalName = firebase.PackagesName.Find(x => x.Contains("Analytics"));
-                    ImportPackageQueue.Instance.ImportPackage(firebase.PackagePath + "/" + finalName);
+                    ImportPackageQueue.Instance.ImportPackage("Assets/" + firebase.PackagePath + "/" + finalName);
                 }
             }
             

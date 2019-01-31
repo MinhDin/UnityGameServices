@@ -31,14 +31,19 @@ public class FirebaseRealtimeDatabaseEditor : ServiceEditor
                 editor.RewriteDefine();
             }
 
-            if (GreenButton("Import Firebase Remote Config Package"))
+            if (GreenButton("Import Firebase Realtime Database Package"))
             {
                 def.UseFBRealtimeDatabase = false;
 
                 if((firebase.PackagesName != null) && (firebase.PackagesName.Count > 0))
                 {
-                    string finalName = firebase.PackagesName.Find(x => x.Contains("Analytics"));
-                    ImportPackageQueue.Instance.ImportPackage(firebase.PackagePath + "/" + finalName);
+                    string finalName = firebase.PackagesName.Find(
+                        x => x.Contains("Database"));
+                    ImportPackageQueue.Instance.ImportPackage("Assets/" + firebase.PackagePath + "/" + finalName);
+                }
+                else
+                {
+                    Debug.LogError("Can't Import package");
                 }
             }
             
@@ -46,7 +51,7 @@ public class FirebaseRealtimeDatabaseEditor : ServiceEditor
         }
         if (!def.UseFBRealtimeDatabase)
         {
-            if (GreenButton("Active Firebase Remote Config"))
+            if (GreenButton("Active Firebase Realtime Database"))
             {
                 def.UseFBRealtimeDatabase = true;
                 editor.RewriteDefine();
@@ -59,7 +64,7 @@ public class FirebaseRealtimeDatabaseEditor : ServiceEditor
 
 		//end section
         GUILayout.Space(50);
-        if (RedButton("Remove Firebase Remote Config"))
+        if (RedButton("Remove Firebase Realtime Database"))
         {
             def.UseFBRealtimeDatabase = false;
             editor.RewriteDefine();
@@ -81,7 +86,7 @@ public class FirebaseRealtimeDatabaseEditor : ServiceEditor
 
 	public override bool IsValidate()
 	{
-		Type type = Type.GetType("Firebase.RemoteConfig.FirebaseRemoteConfig, Firebase.RemoteConfig, Culture=neutral, PublicKeyToken=null");
+		Type type = Type.GetType("Firebase.Database.DatabaseReference, Firebase.Database, Culture=neutral, PublicKeyToken=null");
 		return type != null;
 	}
 

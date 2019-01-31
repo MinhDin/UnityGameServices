@@ -31,8 +31,9 @@ public class FirebaseRemoteConfigEditor : ServiceEditor
 
                 if((firebase.PackagesName != null) && (firebase.PackagesName.Count > 0))
                 {
-                    string finalName = firebase.PackagesName.Find(x => x.Contains("Analytics"));
-                    ImportPackageQueue.Instance.ImportPackage(firebase.PackagePath + "/" + finalName);
+                    string finalName = firebase.PackagesName.Find(
+                        x => x.Contains("RemoteConfig"));
+                    ImportPackageQueue.Instance.ImportPackage("Assets/" + firebase.PackagePath + "/" + finalName);
                 }
             }
             

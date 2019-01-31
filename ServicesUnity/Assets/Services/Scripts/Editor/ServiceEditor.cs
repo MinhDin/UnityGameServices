@@ -12,7 +12,7 @@ using System.Linq;
 public class ServiceEditor
 {
     public List<string> PackagesName { get { return packagesName; } }
-    List<string> packagesName;
+    protected List<string> packagesName;
 
     protected ServiceDef def;
     protected static FontStyle baseFontStyle;
@@ -38,6 +38,19 @@ public class ServiceEditor
     public ServiceEditor(ServiceDef def)
     {
         this.def = def;
+    }
+
+    public virtual void OnEnable()
+    {
+        if (packagesName == null)
+        {
+            if (DirectoryExist(packagePath))
+            {
+
+                packagesName = Directory.GetFiles(Application.dataPath + "/" + packagePath, "*.unitypackage", SearchOption.AllDirectories)
+                                    .Select(x => Path.GetFileName(x)).ToList();
+            }
+        }
     }
 
     public virtual void OnInspectorGUI(ServiceDefEditor editor)
@@ -73,7 +86,7 @@ public class ServiceEditor
         }
         else if (FileExist(packagePath + ".zip"))
         {
-			Debug.Log("DECOMPRESS " + packagePath + ".zip");
+            Debug.Log("DECOMPRESS " + packagePath + ".zip");
             string destination = Application.dataPath + "/" + packagePath + ".zip";
             packagesName = DecompressSharpZip(destination, Application.dataPath + "/" + packagePath);
             return;
