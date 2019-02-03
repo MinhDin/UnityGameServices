@@ -32,7 +32,7 @@ public class AppsFlyerServiceEditor : ServiceEditor
                 editor.RewriteDefine();
             }
 
-            if (GreenButton("Download AppsFlyer Package"))
+            if (GreenButton("Get AppsFlyer Package"))
             {
                 def.UseAppslovin = false;
                 DownloadPackage(editor);

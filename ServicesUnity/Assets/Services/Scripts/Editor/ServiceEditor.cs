@@ -23,7 +23,7 @@ public class ServiceEditor
     protected static GUIStyle gsAlterQuest;
 
     protected UnityWebRequest request;
-    protected string packagePath;
+    protected string packagePath = string.Empty;
 
     static ServiceEditor()
     {
@@ -42,17 +42,23 @@ public class ServiceEditor
 
     public virtual void OnEnable()
     {
-        if (packagesName == null)
-        {
-            if (DirectoryExist(packagePath))
-            {
-
-                packagesName = Directory.GetFiles(Application.dataPath + "/" + packagePath, "*.unitypackage", SearchOption.AllDirectories)
-                                    .Select(x => Path.GetFileName(x)).ToList();
-            }
-        }
+        RefreshPackagesName();
     }
 
+    void RefreshPackagesName()
+    {
+        packagesName = null;
+
+        if (DirectoryExist(packagePath))
+        {
+            packagesName = Directory.GetFiles(Application.dataPath + "/" + packagePath, "*.unitypackage", SearchOption.AllDirectories)
+                                .Select(x => Path.GetFileName(x)).ToList();
+        }
+        else if (FileExist(packagePath + ".unitypackage"))
+        {
+            packagesName = new List<string>() { packagePath + ".unitypackage" };
+        }
+    }
     public virtual void OnInspectorGUI(ServiceDefEditor editor)
     {
 
@@ -68,40 +74,114 @@ public class ServiceEditor
         return false;
     }
 
+    public virtual void ImportPackage(string filter)
+    {
+        if(PackagesName == null)
+        {
+            Debug.Log("Import Failed : package name null.");
+            return;
+        }
+
+        if(string.IsNullOrEmpty(packagePath))
+        {
+            Debug.Log("Import Failed : package path empty");
+            return;
+        }
+        foreach (string file in PackagesName)
+        {
+            if (file.Contains("unitypackage") && file.Contains(filter))
+            {
+                string path = "Assets/" + packagePath + "/" + file;
+                //AssetDatabase.ImportPackage(packagePath, true);
+                ImportPackageQueue.Instance.ImportPackage(path);
+                return;//success
+            }
+        }
+
+        return;//fail
+    }
+
+    protected bool BasicInspectorHeader(ServiceDefEditor editor, string importFilter, ref bool activeParam)
+    {
+        string name = GetName();
+
+        if (!IsValidate())
+        {
+            if (activeParam)
+            {
+                activeParam = false;
+                editor.RewriteDefine();
+            }
+
+            if((packagesName != null) && (packagesName.Count > 0))
+            {
+                if(GreenButton(
+                    string.Format("Import {0} Package", name)))
+                    {
+                        ImportPackage(importFilter);
+                    }
+            }
+            if (GreenButton("Get Facebook Package"))
+            {
+                activeParam = false;
+                DownloadPackage(editor);
+            }
+            return false;
+        }
+
+        if (!activeParam)
+        {
+            if (GreenButton("Active Facebook"))
+            {
+                activeParam = true;
+                editor.RewriteDefine();
+            }
+            return false;
+        }
+
+        return true;
+    }
+
+    protected void BasicInspectorFooter(ServiceDefEditor editor, ref bool activeParam)
+    {
+        //end section
+        GUILayout.Space(50);
+        if (RedButton("Remove " + GetName()))
+        {
+            activeParam = false;
+            editor.RewriteDefine();
+        }
+    }
+
     public virtual void DownloadPackage(ServiceDefEditor editor)
     {
         if (string.IsNullOrEmpty(packagePath))
         {
+            Debug.LogError("Package Path is null");
             return;
         }
 
-        if (DirectoryExist(packagePath))
+        RefreshPackagesName();
+        if ((packagesName == null) || (packagesName.Count == 0))
         {
-            if (packagesName == null)
+            if (FileExist(packagePath + ".zip"))
             {
-                packagesName = Directory.GetFiles(Application.dataPath + "/" + packagePath, "*.unitypackage", SearchOption.AllDirectories)
-                                    .Select(x => Path.GetFileName(x)).ToList();
-            }
-            return;
-        }
-        else if (FileExist(packagePath + ".zip"))
-        {
-            Debug.Log("DECOMPRESS " + packagePath + ".zip");
-            string destination = Application.dataPath + "/" + packagePath + ".zip";
-            packagesName = DecompressSharpZip(destination, Application.dataPath + "/" + packagePath);
-            return;
-        }
-        else
-        {
-            string link = editor.GetDownloadLinkByKey(packagePath);
-            if (!string.IsNullOrEmpty(link))
-            {
-                Debug.Log("DOWNLOAD " + packagePath + link);
+                Debug.Log("DECOMPRESS " + packagePath + ".zip");
                 string destination = Application.dataPath + "/" + packagePath + ".zip";
-                Debug.Log("DOWNLOAD to:" + destination);
+                packagesName = DecompressSharpZip(destination, Application.dataPath + "/" + packagePath);
+            }
+            else
+            {
+                string link = editor.GetDownloadLinkByKey(packagePath);
+                if (!string.IsNullOrEmpty(link))
+                {
+                    Debug.Log("DOWNLOAD " + packagePath + link);
+                    string destination = Application.dataPath + "/" + packagePath + ".zip";
+                    Debug.Log("DOWNLOAD to:" + destination);
 
-                //ServiceDownloadWindow downloadWindow = ServiceDownloadWindow.ShowWindow();
-                //request = downloadWindow.Download(link, destination);
+                    ServiceDownloadWindow downloadWindow = ServiceDownloadWindow.ShowWindow();
+                    request = downloadWindow.Download(link, destination);
+                }
             }
         }
     }
@@ -121,8 +201,30 @@ public class ServiceEditor
         if ((request != null) && (request.isDone))
         {
             request = null;
-            string destination = Application.dataPath + "/" + packagePath + ".zip";
-            packagesName = DecompressSharpZip(destination, Application.dataPath + "/" + packagePath);
+            if (DirectoryExist(packagePath))
+            {
+                if ((packagesName == null) || (packagesName.Count == 0))
+                {
+                    packagesName = Directory.GetFiles(Application.dataPath + "/" + packagePath, "*.unitypackage", SearchOption.AllDirectories)
+                                        .Select(x => Path.GetFileName(x)).ToList();
+                }
+                return;
+            }
+            else if (FileExist(packagePath + ".unitypackage"))
+            {
+                if ((packagesName == null) || (packagesName.Count == 0))
+                {
+                    packagesName = new List<string>() { packagePath + ".unitypackage" };
+                }
+            }
+            else if (FileExist(packagePath + ".zip"))
+            {
+                Debug.Log("DECOMPRESS " + packagePath + ".zip");
+                string destination = Application.dataPath + "/" + packagePath + ".zip";
+                packagesName = DecompressSharpZip(destination, Application.dataPath + "/" + packagePath);
+                return;
+            }
+
         }
     }
 

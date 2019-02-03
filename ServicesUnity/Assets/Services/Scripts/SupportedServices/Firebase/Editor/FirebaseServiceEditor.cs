@@ -46,7 +46,7 @@ public class FirebaseServiceEditor : ServiceEditor
                 editor.RewriteDefine();
             }
 
-            if (GreenButton("Download Firebase Package"))
+            if (GreenButton("Get Firebase Package"))
             {
                 def.UseFirebase = false;
                 DownloadPackage(editor);

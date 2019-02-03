@@ -10,33 +10,65 @@ using System.Net;
 public class AdmobServiceEditor : ServiceEditor
 {
     const string PACKAGE_NAME = "AdmobPackage";
+
     public AdmobServiceEditor(ServiceDef def)
         : base(def)
     {
-
+        packagePath = PACKAGE_NAME;
+        RegisterUpdate();
     }
 
-	public override string GetName()
+    protected override void Update()
+    {
+        bool lastRequest = request != null;
+        base.Update();
+        if (lastRequest && (request == null) && PackagesName != null)
+        {
+            foreach (string file in PackagesName)
+            {
+                if (file.Contains("unitypackage") && file.Contains("Admob"))
+                {
+                    string packagePath = "Assets/" + PACKAGE_NAME + "/" + file;
+                    //AssetDatabase.ImportPackage(packagePath, true);
+                    ImportPackageQueue.Instance.ImportPackage(packagePath);
+                }
+            }
+        }
+    }
+
+    public override string GetName()
     {
         return "Admob";
     }
 
     public override void OnInspectorGUI(ServiceDefEditor editor)
     {
-        if(!IsValidate())
+        if (!IsValidate())
         {
-            if(def.UseAdmob)
+            if (def.UseAdmob)
             {
                 def.UseAdmob = false;
                 editor.RewriteDefine();
             }
 
-            if (GreenButton("Download Admob Package"))
+            if ((packagesName != null) && (packagesName.Count == 0))
             {
-                def.UseAdmob = false;
-                DownloadPackage(editor);
+                if (GreenButton("Get Admob Package"))
+                {
+                    def.UseAdmob = false;
+                    DownloadPackage(editor);
+                }
             }
-            
+            else
+            {
+                if (GreenButton("Import Admob Package"))
+                {
+                    def.UseAdmob = false;
+                    DownloadPackage(editor);
+                }
+            }
+
+
             return;
         }
         if (!def.UseAdmob)
@@ -73,11 +105,12 @@ public class AdmobServiceEditor : ServiceEditor
     }
 
     public override bool IsValidate()
-	{
+    {
         Type type = Type.GetType("GoogleMobileAds.Api.BannerView, Assembly-CSharp, Culture=neutral, PublicKeyToken=null");
         return type != null;
-	}
+    }
 
+    /*
 	public override void DownloadPackage(ServiceDefEditor editor)
 	{
         string link = editor.GetDownloadLinkByKey(PACKAGE_NAME);
@@ -92,26 +125,26 @@ public class AdmobServiceEditor : ServiceEditor
             ImportPackageQueue.Instance.ImportPackage("Assets/" + PACKAGE_NAME +  ".unitypackage");
         }
 	}
+     */
+    /*
+        void AdmobValidate()
+        {
+            if(!DirectoryExist("GoogleMobileAds"))
+            {
+                LogError("* Please import GoogleMobileAds.unitypackage");
+            }
 
-/*
-    void AdmobValidate()
-	{
-		if(!DirectoryExist("GoogleMobileAds"))
-		{
-			LogError("* Please import GoogleMobileAds.unitypackage");
-		}
-
-		if(string.IsNullOrEmpty(def.AdmobAppID_IOS))
-		{	
-			LogError("* Get App Id from Admob : https://apps.admob.com/");
-		}
-	}
- */    
+            if(string.IsNullOrEmpty(def.AdmobAppID_IOS))
+            {	
+                LogError("* Get App Id from Admob : https://apps.admob.com/");
+            }
+        }
+     */
     public override void OnWriteDefine(StreamWriter writer)
     {
-        if(def.UseAdmob)
+        if (def.UseAdmob)
         {
-		    writer.WriteLine("-define:SERVICE_ADMOB");
+            writer.WriteLine("-define:SERVICE_ADMOB");
         }
     }
 }

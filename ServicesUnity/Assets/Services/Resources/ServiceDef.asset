@@ -16,7 +16,8 @@ MonoBehaviour:
   PackageName: 
   UseFirebase: 1
   UseFBAnalytics: 0
-  UseFBRealtimeDatabase: 1
+  UseFBRemoteConfig: 0
+  UseFBRealtimeDatabase: 0
   UseFBLeaderBoard: 1
   FirebaseDatabaseURL: https://word-link-e5bcf.firebaseio.com/
   UseFirebaseAuth: 1
@@ -152,7 +153,7 @@ MonoBehaviour:
     Bonus: 
     ScaleImage: 1.2
     Flags: 12
-  UseFacebook: 0
+  UseFacebook: 1
   UseFlurry: 0
   FlurryKey_IOS: XYR6HRJGGCDXNY6B2WXF
   FlurryKey_Android: 3ZK2DVKD6W568SPNZSNZ

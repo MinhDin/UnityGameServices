@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using System.IO;
 using Services;
+using System;
 
 public class OpenIABServiceEditor : ServiceEditor
 {
@@ -12,7 +13,7 @@ public class OpenIABServiceEditor : ServiceEditor
     public OpenIABServiceEditor(ServiceDef def)
         : base(def)
     {
-
+        packagePath = "OpenIABPackage";
     }
 
     public override string GetName()
@@ -22,6 +23,22 @@ public class OpenIABServiceEditor : ServiceEditor
 
     public override void OnInspectorGUI(ServiceDefEditor editor)
     {
+        if (!IsValidate())
+        {
+            if (def.UseOpenIAB)
+            {
+                def.UseOpenIAB = false;
+                editor.RewriteDefine();
+            }
+
+            if (GreenButton("Get OpenIAB Package"))
+            {
+                def.UseOpenIAB = false;
+                DownloadPackage(editor);
+            }
+            return;
+        }
+
         if (!def.UseOpenIAB)
         {
             if (GreenButton("Active OpenIAB"))
@@ -126,7 +143,8 @@ public class OpenIABServiceEditor : ServiceEditor
 
     public override bool IsValidate()
 	{
-		return false;
+		Type type = Type.GetType("OnePF.OpenIABEventManager, Facebook.Unity, Culture=neutral, PublicKeyToken=null");
+		return type != null;
 	}
 
 	public override void DownloadPackage(ServiceDefEditor editor)
